@@ -2,13 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:sedweb/Screens/Home/homescreen.dart';
 import 'package:sedweb/Screens/Login/login_screen.dart';
 import 'package:sedweb/Screens/SignUp/signup.dart';
 import 'package:sedweb/Screens/welcome/welcome.dart';
 import 'package:sedweb/resources/auth_methods.dart';
-import 'package:sedweb/screens/login/login_screen.dart';
 import 'package:sedweb/utils/colors.dart';
 
 Future<void> main() async {
@@ -34,7 +32,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Sedweb',
       //  theme: ThemeData.dark()

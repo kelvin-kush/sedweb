@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:sedweb/Screens/Home/Feed/feed.dart';
 import 'package:sedweb/Screens/Login/Components/background.dart';
+import 'package:sedweb/Screens/add_post_screen.dart';
 import 'package:sedweb/components/Rounded_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,49 +24,18 @@ class _HomescreenState extends State<Homescreen> {
 
   int _page = 0;
 
-  // late PageController pageController;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   pageController = PageController();
-  // }
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   pageController.dispose();
-  // }
-
-  // void navigationTapped(int page) {
-  //   pageController.jumpToPage(page);
-  // }
-
-  // void onPageChanged(int page) {
-  //   setState(() {
-  //     _page = page;
-  //   });
-  // }
+  List<Widget> homeScreenItems = [
+    Feed(),
+    Text('search'),
+    AddPostScreen(),
+    Text('notif'),
+    Text('profile'),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: homeScreenItems[_page],
-
-      /* Center(
-        child: Text(_firebaseAuth.currentUser!.email ?? ''),
-      ),*/
-      /*  RoundedButton(
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(Color(0xFF6F35A5)),
-            ),
-            text: "SIGN OUT",
-            press: () {
-              AuthController.instance.signout();
-            },
-            textColor: Colors.black, color: Colors.blue,
-          ),*/
+      body: SafeArea(child: homeScreenItems.elementAt(_page)),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(

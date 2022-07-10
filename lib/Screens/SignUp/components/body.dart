@@ -1,14 +1,13 @@
+import 'package:sedweb/Screens/Login/Components/background.dart';
 import 'package:sedweb/Screens/Login/login_screen.dart';
 //import 'package:sedweb/auth_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:sedweb/Screens/SignUp/Components/background.dart';
 //import 'package:final_project/Screens/SignUp/signup.dart';
 import 'package:sedweb/components/Rounded_button.dart';
 import 'package:sedweb/constraints.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/gestures.dart';
-import 'package:get/get.dart';
 import 'package:sedweb/resources/auth_methods.dart';
 
 class Body extends StatefulWidget {
@@ -40,7 +39,8 @@ class _BodyState extends State<Body> {
 
   Future signupPage() async {
     setState(() => isLoading = true);
-    await AuthController.instance.register(
+    await AuthController().register(
+        context,
         emailController.text.trim(),
         passwordController.text.trim(),
         bioController.text.trim(),
@@ -261,7 +261,7 @@ class _BodyState extends State<Body> {
                             fontSize: 17,
                             fontWeight: FontWeight.bold),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => Get.to(() => LoginScreen())),
+                          ..onTap = () => LoginScreen()),
                   ])),
             ),
           ],
