@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sedweb/constraints.dart';
 
 class Feed extends StatefulWidget {
   const Feed({Key? key}) : super(key: key);
@@ -13,13 +14,13 @@ class _FeedState extends State<Feed> {
     return Scaffold(
         body: Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: const Text('SedWeb'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text(
+          'SedWeb',
+        ),
       ),
-      body:Center(
-        child: Text('Feed'),
-      )
-      ,
+      body: Column()
     ));
   }
 }

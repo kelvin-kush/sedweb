@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:sedweb/Screens/Home/Feed/feed.dart';
+import 'package:sedweb/Screens/Home/chats/chat.dart';
 import 'package:sedweb/Screens/Login/Components/background.dart';
 import 'package:sedweb/Screens/add_post_screen.dart';
 import 'package:sedweb/components/Rounded_button.dart';
@@ -27,8 +28,7 @@ class _HomescreenState extends State<Homescreen> {
   List<Widget> homeScreenItems = [
     Feed(),
     Text('search'),
-    AddPostScreen(),
-    Text('notif'),
+    const Chats(),
     Text('profile'),
   ];
 
@@ -57,7 +57,7 @@ class _HomescreenState extends State<Homescreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.add_circle,
+              Icons.message_outlined,
               color: _page == 2 ? Colors.orange : primaryColor,
             ),
             label: '',
@@ -65,16 +65,8 @@ class _HomescreenState extends State<Homescreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.message_outlined,
-              color: _page == 3 ? Colors.orange : primaryColor,
-            ),
-            label: '',
-            backgroundColor: kPrimaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
               Icons.person,
-              color: _page == 4 ? Colors.orange : primaryColor,
+              color: _page == 3 ? Colors.orange : primaryColor,
             ),
             label: '',
             backgroundColor: primaryColor,
