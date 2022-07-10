@@ -16,9 +16,10 @@ class _FeedState extends State<Feed> {
         backgroundColor: Colors.transparent,
         title: const Text('SedWeb'),
       ),
-      body: ListView.builder(itemBuilder: (context, index) {
-        return Container();
-      }),
+      body:Center(
+        child: Text('Feed'),
+      )
+      ,
     ));
   }
 }

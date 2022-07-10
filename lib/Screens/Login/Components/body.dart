@@ -5,7 +5,6 @@ import 'package:sedweb/constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/gestures.dart';
-import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sedweb/resources/auth_methods.dart';
 
@@ -30,8 +29,8 @@ class _BodyState extends State<Body> {
   }*/
   Future loginPage() async {
     setState(() => isLoading = true);
-    await AuthController.instance
-        .login(emailController.text.trim(), passwordController.text.trim());
+    await AuthController()
+        .login(context,emailController.text.trim(), passwordController.text.trim());
     setState(() => isLoading = false);
   }
 
@@ -165,7 +164,7 @@ class _BodyState extends State<Body> {
                             fontSize: 17,
                             fontWeight: FontWeight.bold),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => Get.to(() => SignUp())),
+                          ..onTap = ()  => SignUp()),
                   ])),
             ),
           ],
