@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "212207593132",
+    "project_id": "sedweb-34b77",
+    "storage_bucket": "sedweb-34b77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212207593132:android:5a61c38c664b7cc17fe109",
+        "android_client_info": {
+          "package_name": "com.example.sedweb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212207593132-k4f90oaoqcrauu2njh8hm98j5rdm2ne7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFvS7_IH2MEhFd3gVz3YtjBvG9jOcuyek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212207593132-k4f90oaoqcrauu2njh8hm98j5rdm2ne7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
