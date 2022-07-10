@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sedweb/Screens/Home/chats/components/chat_card.dart';
 import 'package:sedweb/Screens/Home/chats/search_user.dart';
-import 'package:sedweb/constraints.dart';
+import 'package:sedweb/components/constraints.dart';
 
 class Chats extends StatefulWidget {
   const Chats({Key? key}) : super(key: key);
@@ -29,8 +29,8 @@ class _ChatsState extends State<Chats> {
               width: 30,
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchUser()
-                ));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SearchUser()));
                 },
                 child: const Icon(
                   Icons.search,

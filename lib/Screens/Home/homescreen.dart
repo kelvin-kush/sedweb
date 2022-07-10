@@ -6,7 +6,7 @@ import 'package:sedweb/Screens/add_post_screen.dart';
 import 'package:sedweb/components/Rounded_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sedweb/constraints.dart';
+import 'package:sedweb/components/constraints.dart';
 import 'package:sedweb/resources/auth_methods.dart';
 import 'package:sedweb/utils/colors.dart';
 import 'package:sedweb/utils/global_variables.dart';
@@ -44,7 +44,7 @@ class _HomescreenState extends State<Homescreen> {
               color: _page == 0 ? Colors.orange : primaryColor,
             ),
             label: '',
-            backgroundColor: kPrimaryColor,
+            backgroundColor: pp,
           ),
           // ignore: prefer_const_constructors
           BottomNavigationBarItem(

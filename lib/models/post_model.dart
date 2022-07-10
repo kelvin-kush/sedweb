@@ -1,61 +1,53 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Post {
+class PostModel {
   String? postID;
-  String? caption;
+  String? message;
   bool? isVideo;
   double? likes;
-  Object? sender;
-  String? meme;
+  Object sender;
+  String? image;
   List? comments;
   List? likers;
   DateTime? postDate;
-  List? tags;
-  String? timestamp;
 
-  Post({
-    this.caption,
+  PostModel({
+    this.message,
     this.isVideo,
     this.postID,
     this.likers,
     this.likes,
     this.postDate,
-    this.meme,
+    this.image,
     this.comments,
-    this.sender,
-    this.tags,
-    this.timestamp,
+    required this.sender,
   });
 
-  factory Post.fromMap(map) {
-    return Post(
+  factory PostModel.fromMap(map) {
+    return PostModel(
       postID: map[' postID'],
-      meme: map[' meme'],
+      image: map[' image'],
       postDate: map[' postDate'],
       sender: map[' sender'],
-      caption: map[' caption'],
+      message: map[' message'],
       likers: map[' likers'],
       comments: map[' comments'],
       likes: map[' likes'],
       isVideo: map[' isVideo'],
-      tags: ['tags'],
-      timestamp: map['timestamp'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'postID': postID,
-      'meme': meme,
+      'image': image,
       'postDate': postDate,
       'sender': sender,
-      'caption': caption,
+      'message': message,
       'likers': likers,
       'comments': comments,
       'likes': likes,
       'isVideo': isVideo,
-      'tags': tags,
-      'timestamp': timestamp,
     };
   }
 }

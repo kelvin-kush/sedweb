@@ -5,8 +5,9 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sedweb/Screens/Home/chats/components/message_card.dart';
-import 'package:sedweb/constraints.dart';
+
 import 'package:firebase_database/firebase_database.dart';
+import 'package:sedweb/components/constraints.dart';
 import 'package:sedweb/provider/chat_provider.dart';
 
 class ChatScreen extends StatefulWidget {
