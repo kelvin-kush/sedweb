@@ -34,15 +34,16 @@ Widget personCard({
                     height: 50,
                     width: 50,
                     fit: BoxFit.cover,
-                    placeholder: (context, url) {
-                      return const ColoredBox(
-                          color: Colors.white24,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: kPrimaryColor,
-                            ),
-                          ));
-                    },
+                     progressIndicatorBuilder: (context, url,progess) {
+                        return  ColoredBox(
+                            color: Colors.white24,
+                            child:Center(
+                              child: CircularProgressIndicator(
+                                color: kPrimaryColor,
+                                value: progess.progress,
+                              ),
+                            ));
+                      },
                     errorWidget: (context, error, url) {
                       return const Icon(
                         Icons.error,

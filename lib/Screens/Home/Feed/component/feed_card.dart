@@ -23,13 +23,13 @@ class FeedCard extends StatelessWidget {
                     child: postModel.sender != null
                         ? CachedNetworkImage(
                             imageUrl: '${postModel.sender}',
-                            placeholder: (context, url) {
-                              return const ColoredBox(
-                                  color:
-                                       Colors.white24,
+                            progressIndicatorBuilder: (context, url, progess) {
+                              return ColoredBox(
+                                  color: Colors.white24,
                                   child: Center(
                                     child: CircularProgressIndicator(
                                       color: kPrimaryColor,
+                                      value: progess.progress,
                                     ),
                                   ));
                             },
@@ -73,22 +73,21 @@ class FeedCard extends StatelessWidget {
                                 width: double.infinity,
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) {
-                              return const ColoredBox(
-                                  color:
-                                       Colors.white24,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      color: kPrimaryColor,
-                                    ),
-                                  ));
-                            },
-                            errorWidget: (context, error, url) {
-                              return const Icon(
-                                Icons.error,
-                                color: Colors.red,
-                                size: 50,
-                              );
-                            },
+                                  return const ColoredBox(
+                                      color: Colors.white24,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: kPrimaryColor,
+                                        ),
+                                      ));
+                                },
+                                errorWidget: (context, error, url) {
+                                  return const Icon(
+                                    Icons.error,
+                                    color: Colors.red,
+                                    size: 50,
+                                  );
+                                },
                               ),
                             )
                           : Container()
