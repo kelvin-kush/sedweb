@@ -14,8 +14,25 @@ class _SearchUserState extends State<SearchUser> {
     return Scaffold(
       appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: TextFormField(
-            decoration: InputDecoration(labelText: 'Search for user'),
+          centerTitle: true,
+          leadingWidth: 0,
+          title: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              child: Form(
+                child: TextFormField(
+                  decoration: InputDecoration(
+                      hintText: 'Search for user',
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 10,vertical: 0),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                          borderSide: const BorderSide(color: Colors.black45)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                          borderSide: const BorderSide(color: kPrimaryColor))),
+                ),
+              ),
+            ),
           ),
           actions: [
             TextButton(
