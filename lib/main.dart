@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:sedweb/Screens/Home/homescreen.dart';
 import 'package:sedweb/components/constraints.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // if (kIsWeb) {
@@ -30,6 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Sedweb',
+
       //  theme: ThemeData.dark()
       //   .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
       //  home: ResponsiveLayout(
