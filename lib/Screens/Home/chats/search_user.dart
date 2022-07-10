@@ -16,7 +16,7 @@ class _SearchUserState extends State<SearchUser> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            automaticallyImplyLeading: false,
+            // automaticallyImplyLeading: false,
             centerTitle: true,
             title: Padding(
               padding: const EdgeInsets.all(8.0),

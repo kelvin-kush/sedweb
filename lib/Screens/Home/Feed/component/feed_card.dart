@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:sedweb/components/constraints.dart';
 import 'package:sedweb/models/post_model.dart';
 
 class FeedCard extends StatelessWidget {
@@ -20,7 +21,26 @@ class FeedCard extends StatelessWidget {
                   height: 50,
                   child: CircleAvatar(
                     child: postModel.sender != null
-                        ? CachedNetworkImage(imageUrl: '${postModel.sender}')
+                        ? CachedNetworkImage(
+                            imageUrl: '${postModel.sender}',
+                            placeholder: (context, url) {
+                              return const ColoredBox(
+                                  color:
+                                       Colors.white24,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: kPrimaryColor,
+                                    ),
+                                  ));
+                            },
+                            errorWidget: (context, error, url) {
+                              return const Icon(
+                                Icons.error,
+                                color: Colors.red,
+                                size: 25,
+                              );
+                            },
+                          )
                         : const Icon(Icons.person),
                   ),
                 ),
@@ -52,6 +72,23 @@ class FeedCard extends StatelessWidget {
                                 height: 150,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
+                                placeholder: (context, url) {
+                              return const ColoredBox(
+                                  color:
+                                       Colors.white24,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: kPrimaryColor,
+                                    ),
+                                  ));
+                            },
+                            errorWidget: (context, error, url) {
+                              return const Icon(
+                                Icons.error,
+                                color: Colors.red,
+                                size: 50,
+                              );
+                            },
                               ),
                             )
                           : Container()

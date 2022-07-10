@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:sedweb/components/constraints.dart';
 
 Widget personCard({
   required String profileImage,
@@ -16,19 +18,41 @@ Widget personCard({
       height: 70,
 
       // color: Colors.blue,
-      padding:const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Row(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(25),
-            child:profileImage==""?Container(color: Colors.blue,): Image.network(
-              profileImage,
-              height: 50,
-              width: 50,
-              fit: BoxFit.cover,
-            ),
+            child: profileImage == ""
+                ? Container(
+                   height: 50,
+                    width: 50,
+                    color: Colors.blue,
+                  )
+                : CachedNetworkImage(
+                    imageUrl: profileImage,
+                    height: 50,
+                    width: 50,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) {
+                      return const ColoredBox(
+                          color: Colors.white24,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: kPrimaryColor,
+                            ),
+                          ));
+                    },
+                    errorWidget: (context, error, url) {
+                      return const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                        size: 25,
+                      );
+                    },
+                  ),
           ),
-         const SizedBox(
+          const SizedBox(
             width: 10,
           ),
           Expanded(
@@ -38,11 +62,12 @@ Widget personCard({
               children: [
                 Text(
                   name,
-                  style:const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 18),
                 ),
                 Text(
                   info,
-                  style:const TextStyle(fontSize: 14),
+                  style: const TextStyle(fontSize: 14),
                 ),
               ],
             ),
