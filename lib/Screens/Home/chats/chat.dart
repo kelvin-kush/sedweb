@@ -29,8 +29,10 @@ class _ChatsState extends State<Chats> {
               width: 30,
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SearchUser()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SearchUser()));
                 },
                 child: const Icon(
                   Icons.search,
