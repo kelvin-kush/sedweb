@@ -31,23 +31,32 @@ class _FeedState extends State<Feed> {
                     ))
               ],
             ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  AddFeed(),
-                  FeedCard(
-                    postModel: PostModel(
-                        sender: {
-                          'name': 'Kelvin',
-                          'profile':
-                              'https://images.unsplash.com/photo-1461800919507-79b16743b257?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'
-                        },
-                        message: 'Hey',
-                        postDate: DateTime.now(),
-                        image:
-                            'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80'),
-                  ),
-                ],
+            body: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    AddFeed(),
+                    ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: 4,
+                        itemBuilder: (context, index) {
+                          return FeedCard(
+                              postModel: PostModel(
+                                  sender: {
+                                'name': 'Kelvin',
+                                'profile':
+                                    'https://images.unsplash.com/photo-1461800919507-79b16743b257?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'
+                              },
+                                  message: 'Hey',
+                                  postDate: DateTime.now(),
+                                  image:
+                                      'https://thumbs.dreamstime.com/b/baltic-see-very-nice-pic-klaipėda-176842928.jpg'));
+                        }),
+                  ],
+                ),
               ),
             )));
   }
