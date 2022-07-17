@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sedweb/Screens/Home/Feed/component/add_feed.dart';
 import 'package:sedweb/Screens/Home/Feed/component/feed_card.dart';
@@ -38,22 +39,50 @@ class _FeedState extends State<Feed> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     AddFeed(),
-                    ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 4,
-                        itemBuilder: (context, index) {
-                          return FeedCard(
-                              postModel: PostModel(
-                                  sender: {
-                                'name': 'Kelvin',
-                                'profile':
-                                    'https://images.unsplash.com/photo-1461800919507-79b16743b257?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'
-                              },
-                                  message: 'Hey',
-                                  postDate: DateTime.now(),
-                                  image:
-                                      'https://thumbs.dreamstime.com/b/baltic-see-very-nice-pic-klaipėda-176842928.jpg'));
+                    FutureBuilder(
+                        future: FirebaseFirestore.instance
+                            .collection('Posts')
+                            .orderBy('postDate', descending: true)
+                            .get(),
+                        builder: (context, AsyncSnapshot snapshot) {
+                          if (snapshot.hasData) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: kPrimaryColor,
+                                ),
+                              );
+                            } else {
+                              return ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data.docs.length,
+                                  itemBuilder: (context, index) {
+                                    final data = snapshot.data.docs;
+                                    return FeedCard(
+                                        postModel: PostModel(
+                                            sender: {
+                                          'name': data[index]['sender']['name'],
+                                          'profile': data[index]['sender']
+                                              ['profile'],
+                                          'uid': data[index]['sender']['uid'],
+                                        },
+                                            message: data[index]['message'],
+                                            postDate: (data[index]['postDate']
+                                                    as Timestamp)
+                                                .toDate(),
+                                            image: data[index]['image']));
+                                  });
+                            }
+                          } else {
+                            return const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text('No feeds available'),
+                              ),
+                            );
+                          }
                         }),
                   ],
                 ),

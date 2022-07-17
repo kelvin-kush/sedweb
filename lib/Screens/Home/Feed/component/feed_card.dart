@@ -12,7 +12,7 @@ class FeedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(top: 8.0, right: 8, left: 8),
         child: Column(
           children: [
             Row(
@@ -21,13 +21,18 @@ class FeedCard extends StatelessWidget {
                 Container(
                   width: 50,
                   height: 50,
+                  margin: const EdgeInsets.only(right: 5),
                   child: CircleAvatar(
-                    child: postModel.sender != null
+                    child: (postModel.sender as Map)['profile'] != null &&
+                            (postModel.sender as Map)['profile'] != ''
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(25),
                             child: CachedNetworkImage(
-                              imageUrl:
-                                  postModel.image!, //'${postModel.sender}',
+                              imageUrl: (postModel.sender as Map)['profile'],
+                              fit: BoxFit.cover,
+                              width: 50,
+                              height: 50,
+                              //'${postModel.sender}',
                               placeholder: (context, url) {
                                 return const ColoredBox(
                                     color: Colors.white24,
@@ -61,7 +66,7 @@ class FeedCard extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              '${postModel.sender}',
+                              '${(postModel.sender as Map)['name']}',
                               maxLines: 1,
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -77,11 +82,14 @@ class FeedCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      postModel.message != null
-                          ? Text(postModel.message!)
+                      postModel.message != null && postModel.message!.isNotEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Text(postModel.message!),
+                            )
                           : Container(),
                       const SizedBox(height: 5),
-                      postModel.image != null
+                      (postModel.image != null && postModel.image!.isNotEmpty)
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: CachedNetworkImage(
@@ -107,7 +115,53 @@ class FeedCard extends StatelessWidget {
                                 },
                               ),
                             )
-                          : Container()
+                          : Container(),
+                      Row(
+                        children: [
+                          Expanded(
+                              flex: 2,
+                              child: TextButton(
+                                  onPressed: () {},
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: const [
+                                      Icon(
+                                        Icons.favorite,
+                                        color: Colors.red,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text('10K')
+                                    ],
+                                  ),
+                                  style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero))),
+                          Expanded(
+                              flex: 2,
+                              child: TextButton(
+                                onPressed: () {},
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.comment,
+                                      color: Colors.black,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text('10K')
+                                  ],
+                                ),
+                              )),
+                          Expanded(
+                              child: TextButton(
+                            onPressed: () {},
+                            child: Icon(Icons.share, color: Colors.black),
+                          )),
+                        ],
+                      )
                     ],
                   ),
                 ))
