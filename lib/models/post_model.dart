@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class PostModel {
   String? postID;
   String? message;
-  bool? isVideo;
   double? likes;
   Object sender;
   String? image;
@@ -13,7 +10,6 @@ class PostModel {
 
   PostModel({
     this.message,
-    this.isVideo,
     this.postID,
     this.likers,
     this.likes,
@@ -33,21 +29,19 @@ class PostModel {
       likers: map[' likers'],
       comments: map[' comments'],
       likes: map[' likes'],
-      isVideo: map[' isVideo'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'postID': postID,
-      'image': image,
+      'image': image ?? '',
       'postDate': postDate,
       'sender': sender,
-      'message': message,
-      'likers': likers,
-      'comments': comments,
-      'likes': likes,
-      'isVideo': isVideo,
+      'message': message ?? '',
+      'likers': likers ?? [],
+      'comments': comments ?? [],
+      'likes': likes ?? 0,
     };
   }
 }

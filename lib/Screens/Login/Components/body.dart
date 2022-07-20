@@ -30,8 +30,8 @@ class _BodyState extends State<Body> {
   }*/
   Future loginPage() async {
     setState(() => isLoading = true);
-    await AuthController()
-        .login(context,emailController.text.trim(), passwordController.text.trim());
+    await AuthController().login(
+        context, emailController.text.trim(), passwordController.text.trim());
     setState(() => isLoading = false);
   }
 
@@ -150,23 +150,28 @@ class _BodyState extends State<Body> {
                   ),
             SizedBox(height: size.height * 0.02),
             Center(
-              child: RichText(
-                  text: TextSpan(
-                      text: "Don\'t have an account?",
-                      style: TextStyle(
-                        fontSize: 17,
-                        color: Colors.grey[500],
-                      ),
-                      children: [
-                    TextSpan(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignUp()));
+                },
+                child: RichText(
+                    text: TextSpan(
+                        text: "Don\'t have an account? ",
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.grey[500],
+                        ),
+                        children: const [
+                      TextSpan(
                         text: "SignUp",
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 17,
                             fontWeight: FontWeight.bold),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = ()  => SignUp()),
-                  ])),
+                      )
+                    ])),
+              ),
             ),
           ],
         ),

@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sedweb/Screens/Home/homescreen.dart';
+import 'package:sedweb/Screens/Login/login_screen.dart';
 import 'package:sedweb/components/constraints.dart';
 
 Future<void> main() async {
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
         titleTextStyle: TextStyle(
             color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 20),
       )),
-      home: Homescreen(),
+      home: const LoginScreen(),
     );
   }
 }
