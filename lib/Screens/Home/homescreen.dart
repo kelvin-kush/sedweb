@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:sedweb/Screens/Home/Feed/feed.dart';
 import 'package:sedweb/Screens/Home/chats/chat.dart';
+import 'package:sedweb/Screens/Home/profile/profile_screen.dart';
 import 'package:sedweb/Screens/Login/Components/background.dart';
 import 'package:sedweb/Screens/add_post_screen.dart';
 import 'package:sedweb/components/Rounded_button.dart';
@@ -25,11 +26,11 @@ class _HomescreenState extends State<Homescreen> {
 
   int _page = 0;
 
-  List<Widget> homeScreenItems = [
+  List<Widget> homeScreenItems =const [
     Feed(),
     Text('search'),
-    const Chats(),
-    Text('profile'),
+    Chats(),
+    ProfileScreen(),
   ];
 
   @override
