@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class PostModel {
   String? postID;
   String? message;
@@ -21,14 +23,14 @@ class PostModel {
 
   factory PostModel.fromMap(map) {
     return PostModel(
-      postID: map[' postID'],
-      image: map[' image'],
-      postDate: map[' postDate'],
-      sender: map[' sender'],
-      message: map[' message'],
-      likers: map[' likers'],
-      comments: map[' comments'],
-      likes: map[' likes'],
+      postID: map['postID'],
+      image: map['image'],
+      postDate: (map['postDate'] as Timestamp).toDate(),
+      sender: map['sender'],
+      message: map['message'],
+      likers: map['likers'],
+      comments: map['comments'],
+      likes:double.parse("${map['likes']}"),
     );
   }
 

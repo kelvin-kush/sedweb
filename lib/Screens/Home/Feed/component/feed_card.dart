@@ -50,6 +50,7 @@ class FeedCard extends StatelessWidget {
                                 );
                               },
                             ),
+
                           )
                         : const Icon(Icons.person),
                   ),
