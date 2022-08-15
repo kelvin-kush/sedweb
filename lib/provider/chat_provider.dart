@@ -20,26 +20,29 @@ class ChatProvider extends ChangeNotifier {
     return uploadTask;
   }
 
-  Future<void> addMessage(ChatMessage message) async {
-    var chatroom = database.child('/chatRoom/${message.messageSender}');
+  
+  Future<void> addMessage(ChatMessage message, String roomKey) async {
+    var chatroom = database.child('/chatRoom/$roomKey');
     chatroom = chatroom.push();
     chatroom.set({
       'id': chatroom.key,
-      'messageContent': message.messageContent,
-      'messageSender': message.messageSender,
+      'messageContent': message.message,
+      'messageSender': message.sender,
       'sendDate': message.sendDate.millisecondsSinceEpoch,
+      'messageType': message.messageType,
     });
   }
 
-  Future<void> addImageMessage(ChatMessage message) async {
-    var chatroom = database.child('/chatRoom/${message.messageSender}');
+  Future<void> addImageMessage(ChatMessage message, String roomKey) async {
+    var chatroom = database.child('/chatRoom/$roomKey');
     chatroom = chatroom.push();
     chatroom.set({
       'id': chatroom.key,
-      'messageContent': message.messageContent,
-      'messageSender': message.messageSender,
+      'messageContent': message.message ?? "",
+      'messageSender': message.sender,
       'sendDate': message.sendDate.millisecondsSinceEpoch,
-      'imageUrl': message.imageUrl,
+      'imageUrl': message.fileUrl,
+      'messageType': message.messageType,
     });
   }
 }

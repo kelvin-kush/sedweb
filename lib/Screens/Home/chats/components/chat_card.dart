@@ -20,13 +20,13 @@ class ChatCard extends StatelessWidget {
       children: [
         ListTile(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ChatScreen(
-                        username: username,
-                      )),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //       builder: (context) => ChatScreen(
+            //             username: username,
+            //           )),
+            // );
           },
           leading: const CircleAvatar(
             child: Icon(Icons.person),

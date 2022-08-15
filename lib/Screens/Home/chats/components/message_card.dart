@@ -57,19 +57,19 @@ class _MessageCardState extends State<MessageCard> {
                     (widget.isSender ? Alignment.topRight : Alignment.topLeft),
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(25),
                     color: (widget.isSender
-                        ? Colors.blue[200]
-                        : Colors.grey.shade200),
+                        ? Colors.blue
+                        : Colors.grey),
                   ),
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         widget.text,
-                        style: const TextStyle(fontSize: 15),
+                        style: const TextStyle(color: Colors.white,fontSize: 15),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -78,14 +78,14 @@ class _MessageCardState extends State<MessageCard> {
                           Text(
                             DateFormat.jm().format(widget.time),
                             style: const TextStyle(
-                                fontSize: 10, color: Colors.black54),
+                                fontSize: 10, color: Colors.white54),
                           ),
                           const SizedBox(
                             width: 2,
                           ),
                           const Icon(
-                            Icons.mark_chat_unread_outlined,
-                            color: Colors.green,
+                            Icons.done_all,
+                            color: Colors.red,
                             size: 13,
                           ),
                         ],
@@ -110,9 +110,9 @@ class _MessageCardState extends State<MessageCard> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: (widget.isSender
-                        ? Colors.blue[200]
-                        : Colors.grey.shade200),
+                    color: widget.isSender?
+                        Colors.blue
+                        : Colors.grey
                   ),
                   padding: const EdgeInsets.only(
                       left: 5, right: 5, top: 5, bottom: 5),
@@ -123,7 +123,7 @@ class _MessageCardState extends State<MessageCard> {
                         borderRadius: BorderRadius.circular(8),
                         child: CachedNetworkImage(
                           imageUrl: widget.imageUrl!,
-                          height: 320,
+                          height: 180,
                           width: double.infinity,
                           fit: BoxFit.cover,
                         ),
@@ -156,8 +156,8 @@ class _MessageCardState extends State<MessageCard> {
                             width: 2,
                           ),
                           const Icon(
-                            Icons.mark_chat_unread_outlined,
-                            color: Colors.green,
+                            Icons.done_all,
+                            color: Colors.red,
                             size: 13,
                           ),
                         ],
