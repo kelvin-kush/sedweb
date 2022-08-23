@@ -21,8 +21,8 @@ class ChatProvider extends ChangeNotifier {
   }
 
   
-  Future<void> addMessage(ChatMessage message, String roomKey) async {
-    var chatroom = database.child('/chatRoom/$roomKey');
+ Future<void> addMessage(ChatMessage message, String roomKey) async {
+    var chatroom = database.child('/chatRoom/$roomKey/chats');
     chatroom = chatroom.push();
     chatroom.set({
       'id': chatroom.key,
