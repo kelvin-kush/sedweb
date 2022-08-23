@@ -87,7 +87,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
           Expanded(
             child: StreamBuilder(
-                stream: _database .child('chatRoom/${widget.groupChatId}').orderByKey().onValue,
+                stream: _database .child('chatRoom/${widget.groupChatId}/chats')
+                    .orderByKey().onValue,
                 builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
                   if (snapshot.hasData &&
                       snapshot.data!.snapshot.value != null) {

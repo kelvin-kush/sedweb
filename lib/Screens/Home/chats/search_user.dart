@@ -42,12 +42,12 @@ class _SearchUserState extends State<SearchUser> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text(
+                  child: const Text(
                     'Cancel',
                     style: TextStyle(color: kPrimaryColor),
                   )),
             ]),
-        body: Container(
+        body: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: StreamBuilder<QuerySnapshot>(
