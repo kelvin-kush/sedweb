@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:sedweb/Screens/Home/Feed/feed.dart';
 import 'package:sedweb/Screens/Home/chats/chat.dart';
 import 'package:sedweb/Screens/Home/profile/profile_screen.dart';
-import 'package:sedweb/Screens/Login/Components/background.dart';
-import 'package:sedweb/Screens/add_post_screen.dart';
+import 'package:sedweb/Screens/documents/document_home.dart';
 import 'package:sedweb/components/Rounded_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +27,7 @@ class _HomescreenState extends State<Homescreen> {
 
   List<Widget> homeScreenItems =const [
     Feed(),
-    Text('search'),
+    DocumentHome(),
     Chats(),
     ProfileScreen(),
   ];
