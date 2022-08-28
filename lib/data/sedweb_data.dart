@@ -21,15 +21,12 @@ final kDocumentdata = [
     "name": "SQL",
     'color': Colors.indigoAccent,
   },
-  {
-    "name": "FLUTTER",
-    'color': Colors.yellowAccent,
-  },
+  {"name": "FLUTTER", 'color': Colors.brown},
   {
     "name": "C++",
     'color': Colors.teal,
   },
-   {
+  {
     "name": "AJAX",
     'color': Colors.amber,
   },

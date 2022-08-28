@@ -59,7 +59,7 @@ class AuthController {
     }
   }
 
-  register(BuildContext context, String email, password, username, bio) async {
+  register(BuildContext context, String email, password,bio,username) async {
     String res = "Some error Occurred";
     try {
       /* if (email.isNotEmpty ||
