@@ -87,13 +87,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
           Expanded(
             child: StreamBuilder(
-                stream: _database .child('chatRoom/${widget.groupChatId}/chats')
-                    .orderByKey().onValue,
+                stream: _database
+                    .child('chatRoom/${widget.groupChatId}/chats')
+                    .orderByKey()
+                    .onValue,
                 builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
                   if (snapshot.hasData &&
                       snapshot.data!.snapshot.value != null) {
-                    final data = snapshot.data!.snapshot.children
-                        .toList();
+                    final data = snapshot.data!.snapshot.children.toList();
+
                     return GroupedListView<DataSnapshot, String>(
                       elements: data,
                       groupBy: (element) =>
@@ -140,8 +142,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemBuilder: (c, message) {
                         return MessageCard(
                           id: message.child('id').value.toString(),
-                          isSender:
-                              message.child('messageSender').value == currentUser!.uid,
+                          isSender: message.child('messageSender').value ==
+                              currentUser!.uid,
                           text:
                               message.child('messageContent').value.toString(),
                           time: DateTime.fromMillisecondsSinceEpoch(
@@ -185,7 +187,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             onPressed: () {
                               FocusManager.instance.primaryFocus?.unfocus();
                               showModalBottomSheet(
-                                backgroundColor: Colors.grey[300],
+                                  backgroundColor: Colors.grey[300],
                                   context: context,
                                   builder: (context) {
                                     return Padding(
