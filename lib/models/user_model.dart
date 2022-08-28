@@ -13,10 +13,10 @@ class UserModel {
 
   factory UserModel.fromMap(map) {
     return UserModel(
-      // id: map['id'],
-      profile: map['profile'],
+      id: map['uid'],
+      profile: map['profile']??"",
       name: map['username'],
-      // bio: map[' bio'],
+     bio: map['bio']??"",
     );
   }
 }
