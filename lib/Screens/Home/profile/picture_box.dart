@@ -14,21 +14,21 @@ class PictureBox extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return ClipRRect(
       child: Container(
-        width: width * 0.205,
-        height: width * 0.205,
+        width: width * 0.3,
+        height: width * 0.3,
         color: kBorderColor,
         child: TextButton(
           onPressed: () {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>  PictureDetails(image:post.image!)));
+                    builder: (context) => PictureDetails(image: post.image!)));
           },
           child: post.image!.isNotEmpty
               ? CachedNetworkImage(
                   imageUrl: post.image!,
-                  width: width * 0.205,
-                  height: width * 0.205,
+                  width: width * 0.3,
+                  height: width * 0.3,
                   fit: BoxFit.cover,
                   progressIndicatorBuilder: (context, url, progess) {
                     return ColoredBox(
@@ -41,7 +41,12 @@ class PictureBox extends StatelessWidget {
                         ));
                   },
                 )
-              : const SizedBox(child: Icon(Icons.text_format,color: Colors.black,),),
+              : const SizedBox(
+                  child: Icon(
+                    Icons.text_format,
+                    color: Colors.black,
+                  ),
+                ),
           style: TextButton.styleFrom(padding: EdgeInsets.zero),
         ),
       ),

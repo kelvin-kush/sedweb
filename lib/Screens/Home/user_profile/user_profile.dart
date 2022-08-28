@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -41,20 +42,58 @@ class _UserProfileState extends State<UserProfile> {
                       userModel = UserModel.fromMap(snapshot.data);
                       return Column(
                         children: [
-                          const CircleAvatar(
-                            child: Icon(Icons.person),
-                            radius: 50,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            userModel.name!,
-                            style: const TextStyle(fontSize: 19),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
+                           Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: Border.all(color: Colors.white),
+                                  color: Colors.white24,
+                                ),
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: CachedNetworkImage(
+                                        imageUrl: userModel.profile!,
+                                        fit: BoxFit.cover,
+                                        width: 100,
+                                        height: 100,
+                                        //'${postModel.sender}',
+                                        placeholder: (context, url) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(
+                                              color: kPrimaryColor,
+                                            ),
+                                          );
+                                        },
+                                        errorWidget: (context, error, url) {
+                                          return const CircleAvatar(
+                                            child: Icon(Icons.person),
+                                            radius: 50,
+                                          );
+                                        })),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                userModel.name!,
+                                style: const TextStyle(fontSize: 19),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.donut_large,size: 20,),
+                                  SizedBox(width: 5,),
+                                  Text(
+                                    userModel.bio!,
+                                    style: const TextStyle(fontSize: 17),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [

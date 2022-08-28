@@ -93,8 +93,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   if (snapshot.hasData &&
                       snapshot.data!.snapshot.value != null) {
                     final data = snapshot.data!.snapshot.children
-                        .toList()
-                        .reversed
                         .toList();
                     return GroupedListView<DataSnapshot, String>(
                       elements: data,
@@ -111,7 +109,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ),
                       groupComparator: (value1, value2) =>
                           value2.compareTo(value1),
-                      order: GroupedListOrder.ASC,
+                      order: GroupedListOrder.DESC,
                       useStickyGroupSeparators: true,
                       stickyHeaderBackgroundColor: Colors.transparent,
                       shrinkWrap: true,

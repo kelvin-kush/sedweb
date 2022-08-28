@@ -18,6 +18,7 @@ class _FeedState extends State<Feed> {
     return Scaffold(
         body: Scaffold(
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               backgroundColor: Colors.white,
               elevation: 0,
               title: const Text(
@@ -26,7 +27,7 @@ class _FeedState extends State<Feed> {
               actions: [
                 IconButton(
                     onPressed: () {},
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.notifications,
                       color: kPrimaryColor,
                     ))
@@ -46,35 +47,37 @@ class _FeedState extends State<Feed> {
                             .get(),
                         builder: (context, AsyncSnapshot snapshot) {
                           if (snapshot.hasData) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
+                            return ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: snapshot.data.docs.length,
+                                itemBuilder: (context, index) {
+                                  final data = snapshot.data.docs;
+                                  return FeedCard(
+                                      postModel: PostModel(
+                                          sender: {
+                                        'name': data[index]['sender']['name'],
+                                        'profile': data[index]['sender']
+                                            ['profile'],
+                                        'uid': data[index]['sender']['uid'],
+                                      },
+                                          message: data[index]['message'],
+                                          postDate: (data[index]['postDate']
+                                                  as Timestamp)
+                                              .toDate(),
+                                          image: data[index]['image']));
+                                });
+                          }
+                          else if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const SizedBox(
+                              height: 100,
+                              child:  Center(
                                 child: CircularProgressIndicator(
                                   color: kPrimaryColor,
                                 ),
-                              );
-                            } else {
-                              return ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: snapshot.data.docs.length,
-                                  itemBuilder: (context, index) {
-                                    final data = snapshot.data.docs;
-                                    return FeedCard(
-                                        postModel: PostModel(
-                                            sender: {
-                                          'name': data[index]['sender']['name'],
-                                          'profile': data[index]['sender']
-                                              ['profile'],
-                                          'uid': data[index]['sender']['uid'],
-                                        },
-                                            message: data[index]['message'],
-                                            postDate: (data[index]['postDate']
-                                                    as Timestamp)
-                                                .toDate(),
-                                            image: data[index]['image']));
-                                  });
-                            }
+                              ),
+                            );
                           } else {
                             return const Center(
                               child: Padding(
