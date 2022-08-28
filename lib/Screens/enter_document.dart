@@ -39,6 +39,7 @@ class _EnterDocumentState extends State<EnterDocument> {
               children: [
                 TextFormField(
                   maxLength: 30,
+                  controller: titleController,
                   decoration: const InputDecoration(
                     hintText: "Enter document title",
                     enabledBorder: OutlineInputBorder(),
@@ -51,6 +52,7 @@ class _EnterDocumentState extends State<EnterDocument> {
                 ),
                 TextFormField(
                   maxLines: 15,
+                  controller: infoController,
                   decoration: const InputDecoration(
                     hintText: "Enter document informationIs",
                     enabledBorder: OutlineInputBorder(),
@@ -103,9 +105,10 @@ class _EnterDocumentState extends State<EnterDocument> {
                                   setState(() {
                                     isLoading = false;
                                   });
-
                                   showSnackBar(
                                       context, 'Document posted successful');
+                                  titleController.clear();
+                                  infoController.clear();
                                 });
                               } catch (e) {
                                 setState(() {
