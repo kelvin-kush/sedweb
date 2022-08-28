@@ -46,7 +46,7 @@ dependencies:
   grouped_list: ^5.1.2
   firebase_database: ^9.0.18
   timeago: ^3.2.2
-  flutter_quill: ^5.4.1
+  # flutter_quill: ^5.4.1
 
 dev_dependencies:
   flutter_test:

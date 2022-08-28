@@ -4,7 +4,6 @@ import 'package:sedweb/components/constraints.dart';
 import 'package:sedweb/data/sedweb_data.dart';
 import 'package:sedweb/models/document_model.dart';
 import 'package:sedweb/utils/utils.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 
 class EnterDocument extends StatefulWidget {
   const EnterDocument({Key? key}) : super(key: key);
@@ -20,7 +19,6 @@ class _EnterDocumentState extends State<EnterDocument> {
   List<String> documenTypeList = [];
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   bool isLoading = false;
-  QuillController _controller = QuillController.basic();
   @override
   void initState() {
     // TODO: implement initState
@@ -51,23 +49,15 @@ class _EnterDocumentState extends State<EnterDocument> {
                 const SizedBox(
                   height: 30,
                 ),
-                QuillToolbar.basic(controller: _controller),
-                Container(
-                  height: height * 0.5,
-                  child: QuillEditor.basic(
-                    controller: _controller,
-                    readOnly: false, // true for view only mode
+                TextFormField(
+                  maxLines: 15,
+                  decoration: const InputDecoration(
+                    hintText: "Enter document informationIs",
+                    enabledBorder: OutlineInputBorder(),
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(),
                   ),
                 ),
-                // TextFormField(
-                //   maxLines: 15,
-                //   decoration: const InputDecoration(
-                //     hintText: "Enter document informationIs",
-                //     enabledBorder: OutlineInputBorder(),
-                //     border: OutlineInputBorder(),
-                //     focusedBorder: OutlineInputBorder(),
-                //   ),
-                // ),
                 const SizedBox(
                   height: 20,
                 ),
