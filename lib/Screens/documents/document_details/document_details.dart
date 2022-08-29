@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sedweb/Screens/widgets/comment_card.dart';
 import 'package:sedweb/components/constraints.dart';
+import 'package:sedweb/models/comment_model.dart';
 import 'package:sedweb/models/document_model.dart';
+import 'package:sedweb/utils/utils.dart';
 
 class DoucumentDetails extends StatefulWidget {
   const DoucumentDetails(
@@ -16,6 +20,11 @@ class DoucumentDetails extends StatefulWidget {
 }
 
 class _DoucumentDetailsState extends State<DoucumentDetails> {
+  final GlobalKey<FormState> _commentFormKKey = GlobalKey<FormState>();
+  TextEditingController commentController = TextEditingController();
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+  bool isLoading = false;
   List<DocumentModel> allDocs = [];
   int index = 0;
 
@@ -39,6 +48,7 @@ class _DoucumentDetailsState extends State<DoucumentDetails> {
             for (int i = 0; i < snapshot.data.docs.length; i++) {
               allDocs.add(DocumentModel.fromMap(snapshot.data.docs[i]));
             }
+            allDocs = allDocs.reversed.toList();
           }
           return Scaffold(
             appBar: AppBar(
@@ -83,7 +93,7 @@ class _DoucumentDetailsState extends State<DoucumentDetails> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 14.0),
                                   child: Text(
-                                    allDocs[widget.index ?? 0].title!,
+                                    allDocs[_index].title!,
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                         fontSize: 18,
@@ -105,18 +115,72 @@ class _DoucumentDetailsState extends State<DoucumentDetails> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(allDocs[index].title!,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 21, fontWeight: FontWeight.bold)),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Text(
                             allDocs[index].information!,
-                            style: TextStyle(fontSize: 17),
+                            style: const TextStyle(fontSize: 17),
                           ),
-                          SizedBox(
+                          const SizedBox(
+                            height: 40,
+                          ),
+                          Text(
+                            'Comments',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: widget.color),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          FutureBuilder(
+                              future: FirebaseFirestore.instance
+                                  .collection('DocComments')
+                                  .where('postID',
+                                      isEqualTo: allDocs[index].docID)
+                                  .orderBy('postDate', descending: true)
+                                  .get(),
+                              builder: (context, AsyncSnapshot snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data.docs.length > 0) {
+                                  return ListView.builder(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: snapshot.data.docs.length,
+                                      shrinkWrap: true,
+                                      itemBuilder: ((context, _index) {
+                                        CommentModel commentModel =
+                                            CommentModel.fromMap(
+                                                snapshot.data.docs[_index]);
+
+                                        print(commentModel.sender);
+                                        return CommentCard(
+                                            comment: commentModel);
+                                      }));
+                                } else if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return SizedBox(
+                                    height: 50,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: widget.color,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text('No comments'),
+                                  );
+                                }
+                              }),
+                          const SizedBox(
                             height: 20,
                           ),
+
                           ListView.builder(
                               itemCount: allDocs.length,
                               itemBuilder: ((context, _index) {
@@ -135,6 +199,7 @@ class _DoucumentDetailsState extends State<DoucumentDetails> {
                                   },
                                 );
                               }))
+
                         ],
                       ),
                     ),

@@ -92,6 +92,9 @@ class _EnterDocumentState extends State<EnterDocument> {
                         width: double.infinity,
                         child: TextButton(
                             onPressed: () {
+                              setState(() {
+                                isLoading = true;
+                              });
                               try {
                                 final ref = firebaseFirestore
                                     .collection('Documents')
