@@ -39,13 +39,13 @@ class ChatCard extends StatelessWidget {
                     child: Icon(Icons.person),
                   ),
                   title: Text(_userModel.name!),
-                  subtitle: const Text(
-                    'Give me 90 percent',
-                  ),
-                  trailing: const Text(
-                    "today",
-                    style: TextStyle(fontSize: 13, color: Colors.black45),
-                  ),
+                  // subtitle: const Text(
+                  //   'Give me 90 percent',
+                  // ),
+                  // trailing: const Text(
+                  //   "today",
+                  //   style: TextStyle(fontSize: 13, color: Colors.black45),
+                  // ),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15.0),
