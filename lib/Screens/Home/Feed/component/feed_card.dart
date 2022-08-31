@@ -150,24 +150,31 @@ class FeedCard extends StatelessWidget {
                             Expanded(
                                 flex: 2,
                                 child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => FeedDetails(
+                                                postModel: postModel)));
+                                  },
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: const [
                                       Icon(
                                         Icons.comment,
                                         color: Colors.black,
                                       ),
                                       SizedBox(
-                                        width: 10,
+                                        width: 20,
                                       ),
-                                      Text('10K')
                                     ],
                                   ),
                                 )),
                             Expanded(
                                 child: TextButton(
                               onPressed: () {},
-                              child: Icon(Icons.share, color: Colors.black),
+                              child:
+                                  const Icon(Icons.share, color: Colors.black),
                             )),
                           ],
                         )

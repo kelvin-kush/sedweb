@@ -180,103 +180,26 @@ class _DoucumentDetailsState extends State<DoucumentDetails> {
                           const SizedBox(
                             height: 20,
                           ),
-                          Text(
-                            'Add comments',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: widget.color),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Form(
-                              key: _commentFormKKey,
-                              child: TextFormField(
-                                maxLines: 4,
-                                maxLength: 150,
-                                controller: commentController,
-                                validator: (val) {
-                                  if (val == null || val.trim().isEmpty) {
-                                    return 'Feild is empty';
-                                  }
-                                  return null;
-                                },
-                                decoration: const InputDecoration(
-                                  hintText: "Add comment here",
-                                  enabledBorder: OutlineInputBorder(),
-                                  border: OutlineInputBorder(),
-                                  focusedBorder: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                          ),
-                          isLoading
-                              ? const Center(
-                                  child: CircularProgressIndicator(
-                                    color: kPrimaryColor,
-                                  ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: TextButton(
-                                        onPressed: () async {
-                                          User? currentUser =
-                                              FirebaseAuth.instance.currentUser;
-                                          setState(() {
-                                            isLoading = true;
-                                          });
-                                          if (_commentFormKKey.currentState!
-                                              .validate()) {
-                                            _commentFormKKey.currentState!
-                                                .save();
-                                            try {
-                                              final ref = firebaseFirestore
-                                                  .collection('DocComments')
-                                                  .doc();
-                                              CommentModel doc = CommentModel(
-                                                  commentId: ref.id,
-                                                  comment: commentController
-                                                      .text
-                                                      .trim(),
-                                                  sender: currentUser != null
-                                                      ? currentUser.uid
-                                                      : '',
-                                                  postDate: DateTime.now(),
-                                                  postID: allDocs[index].docID);
-                                              ref
-                                                  .set(doc.toMap())
-                                                  .then((value) {
-                                                setState(() {
-                                                  isLoading = false;
-                                                });
-                                                showSnackBar(context,
-                                                    'Comment added successfully');
-                                                commentController.clear();
-                                              });
-                                            } catch (e) {
-                                              setState(() {
-                                                isLoading = false;
-                                              });
 
-                                              showSnackBar(
-                                                  context, 'Comment failed');
-                                            }
-                                          }
-                                        },
-                                        style: TextButton.styleFrom(
-                                            backgroundColor: widget.color),
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text(
-                                            'Comment',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                        )),
-                                  ),
-                                ),
+                          ListView.builder(
+                              itemCount: allDocs.length,
+                              itemBuilder: ((context, _index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                DoucumentDetails(
+                                                  color: widget.color,
+                                                  documentType:
+                                                      widget.documentType,
+                                                  index: _index,
+                                                )));
+                                  },
+                                );
+                              }))
+
                         ],
                       ),
                     ),
