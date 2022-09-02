@@ -55,24 +55,25 @@ class _FeedState extends State<Feed> {
                                   final data = snapshot.data.docs;
                                   return FeedCard(
                                       postModel: PostModel(
+                                          postID: data[index]['postID'],
                                           sender: {
-                                        'name': data[index]['sender']['name'],
-                                        'profile': data[index]['sender']
-                                            ['profile'],
-                                        'uid': data[index]['sender']['uid'],
-                                      },
+                                            'name': data[index]['sender']
+                                                ['name'],
+                                            'profile': data[index]['sender']
+                                                ['profile'],
+                                            'uid': data[index]['sender']['uid'],
+                                          },
                                           message: data[index]['message'],
                                           postDate: (data[index]['postDate']
                                                   as Timestamp)
                                               .toDate(),
                                           image: data[index]['image']));
                                 });
-                          }
-                          else if (snapshot.connectionState ==
+                          } else if (snapshot.connectionState ==
                               ConnectionState.waiting) {
                             return const SizedBox(
                               height: 100,
-                              child:  Center(
+                              child: Center(
                                 child: CircularProgressIndicator(
                                   color: kPrimaryColor,
                                 ),

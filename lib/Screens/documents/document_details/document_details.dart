@@ -181,24 +181,24 @@ class _DoucumentDetailsState extends State<DoucumentDetails> {
                             height: 20,
                           ),
 
-                          ListView.builder(
-                              itemCount: allDocs.length,
-                              itemBuilder: ((context, _index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                DoucumentDetails(
-                                                  color: widget.color,
-                                                  documentType:
-                                                      widget.documentType,
-                                                  index: _index,
-                                                )));
-                                  },
-                                );
-                              }))
+                          // ListView.builder(
+                          //     itemCount: allDocs.length,
+                          //     itemBuilder: ((context, _index) {
+                          //       return GestureDetector(
+                          //         onTap: () {
+                          //           Navigator.push(
+                          //               context,
+                          //               MaterialPageRoute(
+                          //                   builder: (context) =>
+                          //                       DoucumentDetails(
+                          //                         color: widget.color,
+                          //                         documentType:
+                          //                             widget.documentType,
+                          //                         index: _index,
+                          //                       )));
+                          //         },
+                          //       );
+                          //     }))
 
                         ],
                       ),

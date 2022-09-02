@@ -33,6 +33,7 @@ class _FeedDetailsState extends State<FeedDetails> {
         .then((value) {
       snapshot = value;
     });
+    print(widget.postModel.postID);
   }
 
   @override
@@ -49,187 +50,186 @@ class _FeedDetailsState extends State<FeedDetails> {
         child: Stack(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height,
               padding: const EdgeInsets.only(top: 15.0, right: 20, left: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => UserProfile(
-                                    userId: (widget.postModel.sender
-                                        as Map)['uid']!))));
-                      },
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            margin: const EdgeInsets.only(right: 5),
-                            child: CircleAvatar(
-                              child: (widget.postModel.sender
-                                              as Map)['profile'] !=
-                                          null &&
-                                      (widget.postModel.sender
-                                              as Map)['profile'] !=
-                                          ''
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(25),
-                                      child: CachedNetworkImage(
-                                        imageUrl: (widget.postModel.sender
-                                            as Map)['profile'],
-                                        fit: BoxFit.cover,
-                                        width: 50,
-                                        height: 50,
-                                        //'${postModel.sender}',
-                                        placeholder: (context, url) {
-                                          return const ColoredBox(
-                                              color: Colors.white24,
-                                              child: Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: kPrimaryColor,
-                                                ),
-                                              ));
-                                        },
-                                        errorWidget: (context, error, url) {
-                                          return const Icon(
-                                            Icons.error,
-                                            color: Colors.red,
-                                            size: 25,
-                                          );
-                                        },
-                                      ),
-                                    )
-                                  : const Icon(Icons.person),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => UserProfile(
+                                      userId: (widget.postModel.sender
+                                          as Map)['uid']!))));
+                        },
+                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              margin: const EdgeInsets.only(right: 5),
+                              child: CircleAvatar(
+                                child: (widget.postModel.sender
+                                                as Map)['profile'] !=
+                                            null &&
+                                        (widget.postModel.sender
+                                                as Map)['profile'] !=
+                                            ''
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(25),
+                                        child: CachedNetworkImage(
+                                          imageUrl: (widget.postModel.sender
+                                              as Map)['profile'],
+                                          fit: BoxFit.cover,
+                                          width: 50,
+                                          height: 50,
+                                          //'${postModel.sender}',
+                                          placeholder: (context, url) {
+                                            return const ColoredBox(
+                                                color: Colors.white24,
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: kPrimaryColor,
+                                                  ),
+                                                ));
+                                          },
+                                          errorWidget: (context, error, url) {
+                                            return const Icon(
+                                              Icons.error,
+                                              color: Colors.red,
+                                              size: 25,
+                                            );
+                                          },
+                                        ),
+                                      )
+                                    : const Icon(Icons.person),
+                              ),
                             ),
-                          ),
-                          Expanded(
-                              child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  // mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Text(
-                                      '${(widget.postModel.sender as Map)['name']}',
-                                      maxLines: 1,
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          overflow: TextOverflow.ellipsis),
+                            Expanded(
+                                child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Column(
+                                    // mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Text(
+                                        '${(widget.postModel.sender as Map)['name']}',
+                                        maxLines: 1,
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            overflow: TextOverflow.ellipsis),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        timeago
+                                            .format(widget.postModel.postDate!),
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ))
+                          ],
+                        )),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    widget.postModel.message != null &&
+                            widget.postModel.message!.isNotEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: Text(widget.postModel.message!,
+                                style: const TextStyle(fontSize: 19)),
+                          )
+                        : Container(),
+                    const SizedBox(height: 5),
+                    (widget.postModel.image != null &&
+                            widget.postModel.image!.isNotEmpty)
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: CachedNetworkImage(
+                              imageUrl: widget.postModel.image!,
+                              height: 250,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) {
+                                return const ColoredBox(
+                                    color: Colors.white24,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: kPrimaryColor,
+                                      ),
+                                    ));
+                              },
+                              errorWidget: (context, error, url) {
+                                return const Icon(
+                                  Icons.error,
+                                  color: Colors.red,
+                                  size: 50,
+                                );
+                              },
+                            ),
+                          )
+                        : Container(),
+                    Row(
+                      children: [
+                        Expanded(
+                            flex: 2,
+                            child: TextButton(
+                                onPressed: () {},
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
                                     ),
-                                    const SizedBox(
-                                      height: 5,
+                                    SizedBox(
+                                      width: 10,
                                     ),
-                                    Text(
-                                      timeago
-                                          .format(widget.postModel.postDate!),
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
+                                    Text('10K')
                                   ],
                                 ),
-                              ],
-                            ),
-                          ))
-                        ],
-                      )),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  widget.postModel.message != null &&
-                          widget.postModel.message!.isNotEmpty
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 5.0),
-                          child: Text(widget.postModel.message!,
-                              style: const TextStyle(fontSize: 19)),
-                        )
-                      : Container(),
-                  const SizedBox(height: 5),
-                  (widget.postModel.image != null &&
-                          widget.postModel.image!.isNotEmpty)
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: CachedNetworkImage(
-                            imageUrl: widget.postModel.image!,
-                            height: 250,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) {
-                              return const ColoredBox(
-                                  color: Colors.white24,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      color: kPrimaryColor,
-                                    ),
-                                  ));
-                            },
-                            errorWidget: (context, error, url) {
-                              return const Icon(
-                                Icons.error,
-                                color: Colors.red,
-                                size: 50,
-                              );
-                            },
-                          ),
-                        )
-                      : Container(),
-                  Row(
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: TextButton(
+                                style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero))),
+                        Expanded(
+                            flex: 2,
+                            child: TextButton(
                               onPressed: () {},
                               child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: const [
                                   Icon(
-                                    Icons.favorite,
-                                    color: Colors.red,
+                                    Icons.comment,
+                                    color: Colors.black,
                                   ),
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Text('10K')
                                 ],
                               ),
-                              style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero))),
-                      Expanded(
-                          flex: 2,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Row(
-                              children: const [
-                                Icon(
-                                  Icons.comment,
-                                  color: Colors.black,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                              ],
-                            ),
-                          )),
-                      Expanded(
-                          child: TextButton(
-                        onPressed: () {},
-                        child: Icon(Icons.share, color: Colors.black),
-                      )),
-                    ],
-                  ),
-                  const Divider(
-                    thickness: 2,
-                  ),
-                  Expanded(
-                    child: StreamBuilder<QuerySnapshot>(
+                            )),
+                        Expanded(
+                            child: TextButton(
+                          onPressed: () {},
+                          child: Icon(Icons.share, color: Colors.black),
+                        )),
+                      ],
+                    ),
+                    const Divider(
+                      thickness: 2,
+                    ),
+                    StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('comments')
                           .where('postID', isEqualTo: widget.postModel.postID)
@@ -239,10 +239,14 @@ class _FeedDetailsState extends State<FeedDetails> {
                         BuildContext context,
                         snapshot,
                       ) {
-                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        if (!snapshot.hasData ||
+                            snapshot.data!.docs.isEmpty) {
                           //error
                           return const Center(
-                            child: Text('No Comments'),
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('No Comments'),
+                            ),
                           );
                         } else if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -254,7 +258,8 @@ class _FeedDetailsState extends State<FeedDetails> {
                           );
                         } else {
                           return ListView.builder(
-                              //physics: BouncingScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
                               itemCount: snapshot.data!.docs.length,
                               itemBuilder: (context, index) {
                                 DocumentSnapshot data =
@@ -266,16 +271,16 @@ class _FeedDetailsState extends State<FeedDetails> {
                                   comment: data['comment'],
                                   senderName: data['sender.name'],
                                   senderImage: data['sender.profile'],
-                                  timeStamp:
-                                      (data['timeStamp'] as Timestamp).toDate(),
+                                  timeStamp: (data['timeStamp'] as Timestamp)
+                                      .toDate(),
                                 );
                                 // _controller!.setLooping(true);
                               });
                         }
                       },
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
             Align(
