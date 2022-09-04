@@ -1,13 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sedweb/Screens/Home/Feed/feed_details.dart';
 import 'package:sedweb/components/constraints.dart';
 import 'package:sedweb/models/post_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class FeedCard extends StatelessWidget {
+class FeedCard extends StatefulWidget {
   const FeedCard({Key? key, required this.postModel}) : super(key: key);
   final PostModel postModel;
+
+  @override
+  State<FeedCard> createState() => _FeedCardState();
+}
+
+class _FeedCardState extends State<FeedCard> {
+  final User? _currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +25,8 @@ class FeedCard extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => FeedDetails(postModel: postModel)));
+                builder: (context) =>
+                    FeedDetails(postModel: widget.postModel)));
       },
       child: Card(
         child: Padding(
@@ -31,12 +41,14 @@ class FeedCard extends StatelessWidget {
                     height: 50,
                     margin: const EdgeInsets.only(right: 5),
                     child: CircleAvatar(
-                      child: (postModel.sender as Map)['profile'] != null &&
-                              (postModel.sender as Map)['profile'] != ''
+                      child: (widget.postModel.sender as Map)['profile'] !=
+                                  null &&
+                              (widget.postModel.sender as Map)['profile'] != ''
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(25),
                               child: CachedNetworkImage(
-                                imageUrl: (postModel.sender as Map)['profile'],
+                                imageUrl:
+                                    (widget.postModel.sender as Map)['profile'],
                                 fit: BoxFit.cover,
                                 width: 50,
                                 height: 50,
@@ -74,7 +86,7 @@ class FeedCard extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                '${(postModel.sender as Map)['name']}',
+                                '${(widget.postModel.sender as Map)['name']}',
                                 maxLines: 1,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -85,24 +97,25 @@ class FeedCard extends StatelessWidget {
                               width: 5,
                             ),
                             Text(
-                              timeago.format(postModel.postDate!),
+                              timeago.format(widget.postModel.postDate!),
                               style: const TextStyle(fontSize: 12),
                             ),
                           ],
                         ),
-                        postModel.message != null &&
-                                postModel.message!.isNotEmpty
+                        widget.postModel.message != null &&
+                                widget.postModel.message!.isNotEmpty
                             ? Padding(
                                 padding: const EdgeInsets.only(top: 5.0),
-                                child: Text(postModel.message!),
+                                child: Text(widget.postModel.message!),
                               )
                             : Container(),
                         const SizedBox(height: 5),
-                        (postModel.image != null && postModel.image!.isNotEmpty)
+                        (widget.postModel.image != null &&
+                                widget.postModel.image!.isNotEmpty)
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: CachedNetworkImage(
-                                  imageUrl: postModel.image!,
+                                  imageUrl: widget.postModel.image!,
                                   height: 150,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
@@ -130,19 +143,72 @@ class FeedCard extends StatelessWidget {
                             Expanded(
                                 flex: 2,
                                 child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      if (widget.postModel.likers!
+                                          .contains(_currentUser!.uid)) {
+                                        //remove like from db
+                                        await FirebaseFirestore.instance
+                                            .collection("Posts")
+                                            .doc(widget.postModel.postID)
+                                            .update({
+                                          "likers":
+                                              widget.postModel.likers!.isEmpty
+                                                  ? FieldValue.arrayRemove(
+                                                      widget.postModel.likers!)
+                                                  : FieldValue.arrayRemove(
+                                                      [_currentUser!.uid])
+                                        });
+                                        //subtract 1 from likes
+                                        await FirebaseFirestore.instance
+                                            .collection("Posts")
+                                            .doc(widget.postModel.postID)
+                                            .update({
+                                          "likes": widget.postModel.likes! - 1
+                                        });
+                                        setState(() {});
+                                      } else {
+                                        // add like
+                                        widget.postModel.likers!
+                                            .add(_currentUser!.uid);
+                                        await FirebaseFirestore.instance
+                                            .collection("Posts")
+                                            .doc(widget.postModel.postID)
+                                            .update({
+                                          "likers":
+                                              widget.postModel.likers!.isEmpty
+                                                  ? FieldValue.arrayUnion(
+                                                      widget.postModel.likers!)
+                                                  : FieldValue.arrayUnion(
+                                                      [_currentUser!.uid])
+                                        });
+                                        //add 1 to likes
+                                        await FirebaseFirestore.instance
+                                            .collection("Posts")
+                                            .doc(widget.postModel.postID)
+                                            .update({
+                                          "likes": widget.postModel.likes! + 1
+                                        });
+                                        setState(() {});
+                                      }
+                                    },
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      children: const [
+                                      children: [
                                         Icon(
-                                          Icons.favorite,
-                                          color: Colors.red,
+                                          widget.postModel.likers!
+                                                  .contains(_currentUser!.uid)
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color: widget.postModel.likers!
+                                                  .contains(_currentUser!.uid)
+                                              ? Colors.red
+                                              : Colors.black,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 10,
                                         ),
-                                        Text('10K')
+                                        Text(widget.postModel.likes.toString())
                                       ],
                                     ),
                                     style: TextButton.styleFrom(
@@ -155,7 +221,7 @@ class FeedCard extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => FeedDetails(
-                                                postModel: postModel)));
+                                                postModel: widget.postModel)));
                                   },
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class PostModel {
   String? postID;
   String? message;
-  double? likes;
+  int? likes;
   Object sender;
   String? image;
   List? comments;
@@ -28,9 +28,9 @@ class PostModel {
       postDate: (map['postDate'] as Timestamp).toDate(),
       sender: map['sender'],
       message: map['message'],
-      likers: map['likers'],
+      likers: map['likers']??[],
       comments: map['comments'],
-      likes:double.parse("${map['likes']}"),
+      likes:int.parse("${map['likes']}"),
     );
   }
 

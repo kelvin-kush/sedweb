@@ -39,12 +39,12 @@ class _FeedState extends State<Feed> {
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    AddFeed(),
-                    FutureBuilder(
-                        future: FirebaseFirestore.instance
+                    const AddFeed(),
+                    StreamBuilder(
+                        stream: FirebaseFirestore.instance
                             .collection('Posts')
                             .orderBy('postDate', descending: true)
-                            .get(),
+                            .snapshots(),
                         builder: (context, AsyncSnapshot snapshot) {
                           if (snapshot.hasData) {
                             return ListView.builder(
@@ -63,6 +63,8 @@ class _FeedState extends State<Feed> {
                                                 ['profile'],
                                             'uid': data[index]['sender']['uid'],
                                           },
+                                          likes: data[index]['likes'],
+                                          likers: data[index]['likers'],
                                           message: data[index]['message'],
                                           postDate: (data[index]['postDate']
                                                   as Timestamp)
