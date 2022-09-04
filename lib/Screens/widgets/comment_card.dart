@@ -18,8 +18,8 @@ class CommentCard extends StatelessWidget {
             .doc(comment.sender)
             .get(),
         builder: (context, AsyncSnapshot snapshot) {
-          UserModel _userModel = UserModel.fromMap(snapshot.data);
           if (snapshot.hasData) {
+            UserModel _userModel = UserModel.fromMap(snapshot.data);
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
               decoration: const BoxDecoration(

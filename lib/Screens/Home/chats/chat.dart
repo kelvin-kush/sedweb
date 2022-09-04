@@ -21,34 +21,18 @@ class _ChatsState extends State<Chats> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
+          elevation: 1,
           title: const Text(
             'Chats',
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: kPrimaryColor)),
-                height: 30,
-                width: 30,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SearchUser()));
-                  },
-                  child: const Icon(
-                    Icons.search,
-                    size: 20,
-                    color: kPrimaryColor,
-                  ),
-                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                ),
-              ),
-            ),
+            IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.chat_bubble_rounded,
+                  color: kPrimaryColor,
+                ))
           ],
         ),
         body: StreamBuilder(

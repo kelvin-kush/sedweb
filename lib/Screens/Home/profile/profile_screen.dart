@@ -21,6 +21,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       appBar: AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.white,
+              elevation: 1,
+              title: const Text(
+                'Profile',
+              ),
+              actions: [
+                IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.person,
+                      color: kPrimaryColor,
+                    ))
+              ],
+            ),
       body: SafeArea(
         child: Container(
           width: double.infinity,
@@ -28,14 +44,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Stack(
             children: [
               SingleChildScrollView(
-                  child: FutureBuilder(
-                      future: FirebaseFirestore.instance
+                  child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
                           .collection('users')
                           .doc(user!.uid)
-                          .get(),
+                          .snapshots(),
                       builder: (context, AsyncSnapshot snapshot) {
                         if (snapshot.hasData) {
-                          print(snapshot.data);
+                          // print(snapshot.data);
                           currentUSer = UserModel.fromMap(snapshot.data!);
                           return Column(
                             children: [
@@ -95,8 +111,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  attributes('Followers: ', '1.5k'),
-                                  attributes('Following: ', '1k')
+                                  attributes('Followers: ', '${currentUSer.followers!.length}'),
+                                  attributes('Following: ', '${currentUSer.following!.length}')
                                 ],
                               ),
                               const SizedBox(

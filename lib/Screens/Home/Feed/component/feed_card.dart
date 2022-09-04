@@ -37,8 +37,8 @@ class _FeedCardState extends State<FeedCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 50,
-                    height: 50,
+                    width: 40,
+                    height: 40,
                     margin: const EdgeInsets.only(right: 5),
                     child: CircleAvatar(
                       child: (widget.postModel.sender as Map)['profile'] !=
@@ -50,8 +50,8 @@ class _FeedCardState extends State<FeedCard> {
                                 imageUrl:
                                     (widget.postModel.sender as Map)['profile'],
                                 fit: BoxFit.cover,
-                                width: 50,
-                                height: 50,
+                                width: 40,
+                                height: 40,
                                 //'${postModel.sender}',
                                 placeholder: (context, url) {
                                   return const ColoredBox(

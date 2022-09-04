@@ -37,6 +37,7 @@ class _HomescreenState extends State<Homescreen> {
     return Scaffold(
       body: SafeArea(child: homeScreenItems.elementAt(_page)),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: kPrimaryColor,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
@@ -44,7 +45,7 @@ class _HomescreenState extends State<Homescreen> {
               color: _page == 0 ? Colors.orange : primaryColor,
             ),
             label: '',
-            backgroundColor: pp,
+            backgroundColor: kPrimaryColor,
           ),
           // ignore: prefer_const_constructors
           BottomNavigationBarItem(

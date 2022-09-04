@@ -26,139 +26,260 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        elevation: 1,
+        title: const Text(
+          'Profile',
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.person,
+                color: kPrimaryColor,
+              ))
+        ],
+      ),
       body: SafeArea(
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
           child: SingleChildScrollView(
-              child: FutureBuilder(
-                  future: FirebaseFirestore.instance
+              child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
                       .collection('users')
                       .doc(widget.userId)
-                      .get(),
+                      .snapshots(),
                   builder: (context, AsyncSnapshot snapshot) {
                     UserModel? userModel;
                     if (snapshot.hasData) {
                       userModel = UserModel.fromMap(snapshot.data);
                       return Column(
                         children: [
-                           Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(color: Colors.white),
-                                  color: Colors.white24,
-                                ),
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: CachedNetworkImage(
-                                        imageUrl: userModel.profile!,
-                                        fit: BoxFit.cover,
-                                        width: 100,
-                                        height: 100,
-                                        //'${postModel.sender}',
-                                        placeholder: (context, url) {
-                                          return const Center(
-                                            child: CircularProgressIndicator(
-                                              color: kPrimaryColor,
-                                            ),
-                                          );
-                                        },
-                                        errorWidget: (context, error, url) {
-                                          return const CircleAvatar(
-                                            child: Icon(Icons.person),
-                                            radius: 50,
-                                          );
-                                        })),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(color: Colors.white),
+                              color: Colors.white24,
+                            ),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: CachedNetworkImage(
+                                    imageUrl: userModel.profile!,
+                                    fit: BoxFit.cover,
+                                    width: 100,
+                                    height: 100,
+                                    //'${postModel.sender}',
+                                    placeholder: (context, url) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(
+                                          color: kPrimaryColor,
+                                        ),
+                                      );
+                                    },
+                                    errorWidget: (context, error, url) {
+                                      return const CircleAvatar(
+                                        child: Icon(Icons.person),
+                                        radius: 50,
+                                      );
+                                    })),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            userModel.name!,
+                            style: const TextStyle(fontSize: 19),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.donut_large,
+                                size: 20,
                               ),
-                              const SizedBox(
-                                height: 10,
+                              SizedBox(
+                                width: 5,
                               ),
                               Text(
-                                userModel.name!,
-                                style: const TextStyle(fontSize: 19),
+                                userModel.bio!,
+                                style: const TextStyle(fontSize: 17),
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(Icons.donut_large,size: 20,),
-                                  SizedBox(width: 5,),
-                                  Text(
-                                    userModel.bio!,
-                                    style: const TextStyle(fontSize: 17),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              attributes('Followers: ', '1.5k'),
-                              attributes('Following: ', '1k'),
-                              Card(
-                                child: TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _isCreatingChat = true;
-                                    });
-                                    try {
-                                      if (currentUser!.uid
-                                              .compareTo(widget.userId) ==
-                                          -1) {
-                                        groupChatId =
-                                            "${currentUser!.uid}-${widget.userId}";
-                                      } else {
-                                        groupChatId =
-                                            "${widget.userId}-${currentUser!.uid}";
+                              attributes('Followers: ',
+                                  '${userModel.followers!.length}'),
+                              attributes('Following: ',
+                                  '${userModel.following!.length}'),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Card(
+                                  child: TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _isCreatingChat = true;
+                                      });
+                                      try {
+                                        if (currentUser!.uid
+                                                .compareTo(widget.userId) ==
+                                            -1) {
+                                          groupChatId =
+                                              "${currentUser!.uid}-${widget.userId}";
+                                        } else {
+                                          groupChatId =
+                                              "${widget.userId}-${currentUser!.uid}";
+                                        }
+                                        final chatroom = _database.child(
+                                            '/chatRoom/$groupChatId/members');
+                                        chatroom.set({
+                                          widget.userId: true,
+                                          currentUser!.uid: true,
+                                        });
+                                        final chatroomUser1 = _database.child(
+                                            '/chatRoomUsers/${widget.userId}/$groupChatId');
+                                        chatroomUser1.set({
+                                          'person': currentUser!.uid,
+                                        });
+                                        final chatroomUser2 = _database.child(
+                                            '/chatRoomUsers/${currentUser!.uid}/$groupChatId');
+                                        chatroomUser2.set({
+                                          'person': widget.userId,
+                                        });
+                                        setState(() {
+                                          _isCreatingChat = false;
+                                        });
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: ((context) =>
+                                                    ChatScreen(
+                                                      user: userModel!,
+                                                      groupChatId: groupChatId,
+                                                    ))));
+                                      } catch (e) {
+                                        setState(() {
+                                          _isCreatingChat = false;
+                                        });
                                       }
-                                      final chatroom = _database.child(
-                                          '/chatRoom/$groupChatId/members');
-                                      chatroom.set({
-                                        widget.userId: true,
-                                        currentUser!.uid: true,
-                                      });
-                                      final chatroomUser1 = _database.child(
-                                          '/chatRoomUsers/${widget.userId}/$groupChatId');
-                                      chatroomUser1.set({
-                                        'person': currentUser!.uid,
-                                      });
-                                      final chatroomUser2 = _database.child(
-                                          '/chatRoomUsers/${currentUser!.uid}/$groupChatId');
-                                      chatroomUser2.set({
-                                        'person': widget.userId,
-                                      });
-                                      setState(() {
-                                        _isCreatingChat = false;
-                                      });
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: ((context) => ChatScreen(
-                                                    user: userModel!,
-                                                    groupChatId: groupChatId,
-                                                  ))));
-                                    } catch (e) {
-                                      setState(() {
-                                        _isCreatingChat = false;
-                                      });
-                                    }
-                                  },
-                                  child: _isCreatingChat
-                                      ? const Center(
-                                          child: SizedBox(
-                                              height: 29,
-                                              width: 29,
-                                              child: CircularProgressIndicator(
+                                    },
+                                    child: _isCreatingChat
+                                        ? const Center(
+                                            child: SizedBox(
+                                                height: 29,
+                                                width: 29,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: kPrimaryColor,
+                                                )),
+                                          )
+                                        : Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: const [
+                                              Icon(
+                                                Icons.mail,
                                                 color: kPrimaryColor,
-                                              )),
-                                        )
-                                      : const Icon(Icons.mail),
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text(
+                                                'Message',
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                              )
+                                            ],
+                                          ),
+                                  ),
                                 ),
-                              )
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Expanded(
+                                child: Card(
+                                    child: TextButton(
+                                  onPressed: userModel.followers!
+                                          .contains(currentUser!.uid)
+                                      ? () async {
+                                          await FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(userModel!.id)
+                                              .update({
+                                            'followers': FieldValue.arrayRemove(
+                                                [currentUser!.uid])
+                                          }).then((value) async {
+                                            await FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(currentUser!.uid)
+                                                .update({
+                                              'following':
+                                                  FieldValue.arrayRemove(
+                                                      [currentUser!.uid])
+                                            });
+                                          });
+                                        }
+                                      : () async {
+                                          await FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(userModel!.id)
+                                              .update({
+                                            'followers': FieldValue.arrayUnion(
+                                                [currentUser!.uid])
+                                          }).then((value) async {
+                                            await FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(currentUser!.uid)
+                                                .update({
+                                              'following':
+                                                  FieldValue.arrayUnion(
+                                                      [currentUser!.uid])
+                                            });
+                                          });
+                                        },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        userModel.followers!
+                                                .contains(currentUser!.uid)
+                                            ? Icons.person_pin
+                                            : Icons.person_add,
+                                        color: kPrimaryColor,
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        userModel.followers!
+                                                .contains(currentUser!.uid)
+                                            ? 'Following'
+                                            : 'Follow',
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                              ),
                             ],
                           ),
                           const SizedBox(
@@ -188,7 +309,7 @@ class _UserProfileState extends State<UserProfile> {
                                           const NeverScrollableScrollPhysics(),
                                       gridDelegate:
                                           const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 4,
+                                        crossAxisCount: 3,
                                         childAspectRatio: 1,
                                         crossAxisSpacing: 8,
                                         mainAxisSpacing: 8,

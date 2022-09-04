@@ -3,31 +3,31 @@ import 'package:flutter/material.dart';
 final kDocumentdata = [
   {
     "name": "JAVA",
-    'color': Colors.redAccent,
+    'color': Colors.white,
   },
   {
     "name": "HTML",
-    'color': Colors.blueAccent,
+    'color': Colors.white,
   },
   {
     "name": "PYTHON",
-    'color': Colors.orangeAccent,
+    'color': Colors.white,
   },
   {
     "name": "VISUAL BASIC",
-    'color': Colors.greenAccent,
+    'color': Colors.white,
   },
   {
     "name": "SQL",
-    'color': Colors.indigoAccent,
+    'color': Colors.white,
   },
-  {"name": "FLUTTER", 'color': Colors.brown},
+  {"name": "FLUTTER", 'color': Colors.white},
   {
     "name": "C++",
-    'color': Colors.teal,
+    'color': Colors.white,
   },
   {
     "name": "AJAX",
-    'color': Colors.amber,
+    'color': Colors.white,
   },
 ];

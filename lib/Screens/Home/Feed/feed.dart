@@ -20,7 +20,7 @@ class _FeedState extends State<Feed> {
             appBar: AppBar(
               automaticallyImplyLeading: false,
               backgroundColor: Colors.white,
-              elevation: 0,
+              elevation: 1,
               title: const Text(
                 'SedWeb',
               ),
@@ -28,7 +28,7 @@ class _FeedState extends State<Feed> {
                 IconButton(
                     onPressed: () {},
                     icon: const Icon(
-                      Icons.notifications,
+                      Icons.home,
                       color: kPrimaryColor,
                     ))
               ],

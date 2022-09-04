@@ -21,40 +21,43 @@ class ChatCard extends StatelessWidget {
           UserModel? _userModel;
           if (snapshot.hasData) {
             _userModel = UserModel.fromMap(snapshot.data);
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ChatScreen(
-                                user: _userModel!,
-                                groupChatId: groupChatId,
-                              )),
-                    );
-                  },
-                  leading: const CircleAvatar(
-                    child: Icon(Icons.person),
+            return Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ChatScreen(
+                                  user: _userModel!,
+                                  groupChatId: groupChatId,
+                                )),
+                      );
+                    },
+                    leading: const CircleAvatar(
+                      child: Icon(Icons.person),
+                    ),
+                    title: Text(_userModel.name!),
+                    // subtitle: const Text(
+                    //   'Give me 90 percent',
+                    // ),
+                    // trailing: const Text(
+                    //   "today",
+                    //   style: TextStyle(fontSize: 13, color: Colors.black45),
+                    // ),
                   ),
-                  title: Text(_userModel.name!),
-                  // subtitle: const Text(
-                  //   'Give me 90 percent',
-                  // ),
-                  // trailing: const Text(
-                  //   "today",
-                  //   style: TextStyle(fontSize: 13, color: Colors.black45),
-                  // ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Divider(
-                    color: Colors.black12,
-                    height: 0.1,
-                  ),
-                )
-              ],
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Divider(
+                      color: Colors.black12,
+                      height: 0.1,
+                    ),
+                  )
+                ],
+              ),
             );
           } else {
             return Column(
