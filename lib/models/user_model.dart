@@ -3,8 +3,8 @@ class UserModel {
   String? profile;
   String? name;
   String? bio;
-  List ?followers;
-  List ?following;
+  List? followers;
+  List? following;
 
   UserModel({
     this.id,
@@ -17,12 +17,20 @@ class UserModel {
 
   factory UserModel.fromMap(map) {
     return UserModel(
-      id: map['uid']??"",
-      profile: map['profile']??"",
-      name: map['username'],
-     bio: map['bio']??"",
-     followers: map['followers']??[],
-     following: map['following']??[]
-    );
+        id: map['uid'] ?? "",
+        profile: map['profile'] ?? "",
+        name: map['username'],
+        bio: map['bio'] ?? "",
+        followers: map['followers'] ?? [],
+        following: map['following'] ?? []);
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'profile': profile,
+        'name': name,
+        'bio': bio,
+        'followers': followers,
+        'following': following
+      };
 }

@@ -5,7 +5,9 @@ import 'package:sedweb/Screens/Home/chats/components/chat_card.dart';
 import 'package:sedweb/Screens/Home/chats/components/message_card.dart';
 import 'package:sedweb/Screens/Home/chats/components/preson_card.dart';
 import 'package:sedweb/Screens/Home/chats/search_user.dart';
+import 'package:sedweb/Screens/user_search/user_search.dart';
 import 'package:sedweb/components/constraints.dart';
+import 'package:sedweb/service/firebase_db.dart';
 
 class Chats extends StatefulWidget {
   const Chats({Key? key}) : super(key: key);
@@ -28,9 +30,18 @@ class _ChatsState extends State<Chats> {
           ),
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  try {
+                    var res = await FirebaseDB.instance.getAllUsers();
+                    showSearch(
+                        context: context,
+                        delegate: UserSearchDelegate(users: res));
+                  } catch (e) {
+                    print(e);
+                  }
+                },
                 icon: const Icon(
-                  Icons.chat_bubble_rounded,
+                  Icons.search_outlined,
                   color: kPrimaryColor,
                 ))
           ],
