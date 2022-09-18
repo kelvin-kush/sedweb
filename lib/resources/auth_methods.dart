@@ -48,7 +48,7 @@ class AuthController {
   login(BuildContext context, String email, String password) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
-      Navigator.push(
+      Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Homescreen()));
     } on FirebaseAuthException catch (e) {
       // account creation failed
@@ -59,7 +59,7 @@ class AuthController {
     }
   }
 
-  register(BuildContext context, String email, password,bio,username) async {
+  register(BuildContext context, String email, password, bio, username) async {
     String res = "Some error Occurred";
     try {
       /* if (email.isNotEmpty ||

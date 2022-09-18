@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:sedweb/Screens/Home/Feed/feed.dart';
+import 'package:sedweb/Screens/Home/articles/articles_tab.dart';
 import 'package:sedweb/Screens/Home/chats/chat.dart';
 import 'package:sedweb/Screens/Home/profile/profile_screen.dart';
 import 'package:sedweb/Screens/documents/document_home.dart';
@@ -25,11 +26,13 @@ class _HomescreenState extends State<Homescreen> {
 
   int _page = 0;
 
-  List<Widget> homeScreenItems =const [
+  List<Widget> homeScreenItems = const [
     Feed(),
     DocumentHome(),
+    ArticlesTab(),
     Chats(),
     ProfileScreen(),
+    //PostScreen(),
   ];
 
   @override
@@ -58,7 +61,7 @@ class _HomescreenState extends State<Homescreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.message_outlined,
+              Icons.post_add,
               color: _page == 2 ? Colors.orange : primaryColor,
             ),
             label: '',
@@ -66,8 +69,16 @@ class _HomescreenState extends State<Homescreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.person,
+              Icons.message_outlined,
               color: _page == 3 ? Colors.orange : primaryColor,
+            ),
+            label: '',
+            backgroundColor: kPrimaryColor,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+              color: _page == 4 ? Colors.orange : primaryColor,
             ),
             label: '',
             backgroundColor: primaryColor,

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +19,13 @@ Future<void> main() async {
   //   );
   // }
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  bool isLoggedIn = FirebaseAuth.instance.currentUser != null;
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final bool isLoggedIn;
+  const MyApp({Key? key, required this.isLoggedIn}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -43,7 +46,7 @@ class MyApp extends StatelessWidget {
         titleTextStyle: TextStyle(
             color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 20),
       )),
-      home: LoginScreen(),
+      home: isLoggedIn ? Homescreen() : const LoginScreen(),
     );
   }
 }

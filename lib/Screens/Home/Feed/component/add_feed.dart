@@ -3,14 +3,19 @@ import 'package:sedweb/Screens/Home/Feed/add_new_feed/new_feed.dart';
 import 'package:sedweb/components/constraints.dart';
 
 class AddFeed extends StatelessWidget {
-  const AddFeed({Key? key}) : super(key: key);
+  final bool isFromArticles;
+  const AddFeed({Key? key, this.isFromArticles = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: ((context) => const AddNewFeed())));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: ((context) => AddNewFeed(
+                      isFromArticles: isFromArticles,
+                    ))));
       },
       child: Card(
           color: const Color(0xFFF4F4F4),

@@ -54,7 +54,7 @@ class _EnterDocumentState extends State<EnterDocument> {
                   maxLines: 15,
                   controller: infoController,
                   decoration: const InputDecoration(
-                    hintText: "Enter document informationIs",
+                    hintText: "Enter document information",
                     enabledBorder: OutlineInputBorder(),
                     border: OutlineInputBorder(),
                     focusedBorder: OutlineInputBorder(),

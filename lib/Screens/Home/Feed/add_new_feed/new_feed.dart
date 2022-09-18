@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +10,13 @@ import 'package:sedweb/Screens/Home/homescreen.dart';
 import 'package:sedweb/components/constraints.dart';
 import 'package:sedweb/models/post_model.dart';
 import 'package:sedweb/models/user_model.dart';
+import 'package:sedweb/service/document_service.dart';
 import 'package:sedweb/utils/utils.dart';
 import 'package:path/path.dart';
 
 class AddNewFeed extends StatefulWidget {
-  const AddNewFeed({Key? key}) : super(key: key);
+  final bool isFromArticles;
+  const AddNewFeed({Key? key, this.isFromArticles = false}) : super(key: key);
 
   @override
   State<AddNewFeed> createState() => _AddNewFeedState();
@@ -25,6 +28,7 @@ class _AddNewFeedState extends State<AddNewFeed> {
   bool isLoading = false;
   User? user = FirebaseAuth.instance.currentUser;
   UserModel currentUSer = UserModel();
+  PlatformFile? currentDoc;
 
   @override
   void initState() {
@@ -39,11 +43,23 @@ class _AddNewFeedState extends State<AddNewFeed> {
     });
   }
 
+  void _onPickDocument() async {
+    var res = await DocumentService.instance.pickDocument();
+    if (res is PlatformFile) {
+      setState(() {
+        // print(File(res.path!,).readAsLinesSync());
+        currentDoc = res;
+      });
+    }
+  }
+
+  void _onPostArticle() async {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add new feed'),
+        title: Text(widget.isFromArticles ? 'Add new article' : 'Add new feed'),
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
@@ -71,7 +87,9 @@ class _AddNewFeedState extends State<AddNewFeed> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5)),
                       fillColor: Colors.white,
-                      hintText: 'Share your ideas'),
+                      hintText: widget.isFromArticles
+                          ? 'Enter article topic'
+                          : 'Share your ideas'),
                 ),
                 chosenPictures.isNotEmpty
                     ? Container(
@@ -98,52 +116,66 @@ class _AddNewFeedState extends State<AddNewFeed> {
                           bottom: BorderSide(
                               color: Color(0xFF666666), width: 0.5))),
                   child: ListTile(
-                    onTap: () async {
-                      try {
-                        File picture = await pickImage(ImageSource.camera);
-                        if (picture.path.isNotEmpty) {
-                          chosenPictures.add(picture);
-                        }
+                    onTap: widget.isFromArticles
+                        ? _onPickDocument
+                        : () async {
+                            try {
+                              File picture =
+                                  await pickImage(ImageSource.camera);
+                              if (picture.path.isNotEmpty) {
+                                chosenPictures.add(picture);
+                              }
 
-                        setState(() {});
-                        print(picture.path);
-                      } catch (e) {
-                        showSnackBar(context, 'Error in picking image');
-                      }
-                    },
-                    leading: const Icon(
-                      Icons.camera,
+                              setState(() {});
+                              print(picture.path);
+                            } catch (e) {
+                              showSnackBar(context, 'Error in picking image');
+                            }
+                          },
+                    leading: Icon(
+                      this.widget.isFromArticles
+                          ? Icons.document_scanner
+                          : Icons.camera,
                       color: Colors.grey,
                     ),
-                    title: const Text('Camera'),
+                    title: Text(
+                        this.widget.isFromArticles ? 'Document' : 'Camera'),
                   ),
                 ),
-                Container(
-                  decoration: const BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                              color: Color(0xFF666666), width: 0.5))),
-                  child: ListTile(
-                    onTap: () async {
-                      try {
-                        File picture = await pickImage(ImageSource.gallery);
-                        if (picture.path.isNotEmpty) {
-                          chosenPictures.add(picture);
-                        }
+                SizedBox(
+                  height: 10,
+                ),
+                this.widget.isFromArticles
+                    ? Text(currentDoc == null
+                        ? 'No document selected'
+                        : currentDoc!.name)
+                    : Container(
+                        decoration: const BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    color: Color(0xFF666666), width: 0.5))),
+                        child: ListTile(
+                          onTap: () async {
+                            try {
+                              File picture =
+                                  await pickImage(ImageSource.gallery);
+                              if (picture.path.isNotEmpty) {
+                                chosenPictures.add(picture);
+                              }
 
-                        setState(() {});
-                        print(picture.path);
-                      } catch (e) {
-                        showSnackBar(context, 'Error in picking image');
-                      }
-                    },
-                    leading: const Icon(
-                      Icons.image,
-                      color: Colors.grey,
-                    ),
-                    title: const Text('Picture/Video'),
-                  ),
-                ),
+                              setState(() {});
+                              print(picture.path);
+                            } catch (e) {
+                              showSnackBar(context, 'Error in picking image');
+                            }
+                          },
+                          leading: const Icon(
+                            Icons.image,
+                            color: Colors.grey,
+                          ),
+                          title: const Text('Picture/Video'),
+                        ),
+                      ),
                 Container(
                   width: double.infinity,
                   margin: const EdgeInsets.only(top: 20),
@@ -154,43 +186,45 @@ class _AddNewFeedState extends State<AddNewFeed> {
                           ),
                         )
                       : TextButton(
-                          onPressed: () {
-                            setState(() {
-                              isLoading = true;
-                            });
-                            if (chosenPictures.isEmpty) {
-                              uploadPostFeed(
-                                context,
-                                PostModel(
-                                  sender: {
-                                    'uid': user!.uid,
-                                    'name': currentUSer.name,
-                                    'profile': currentUSer.profile ?? ''
-                                  },
-                                  postDate: DateTime.now(),
-                                  message: controller.text,
-                                  image: '',
-                                ),
-                              );
-                            } else {
-                              uploadImage(context, chosenPictures[0])
-                                  .then((value) {
-                                uploadPostFeed(
-                                  context,
-                                  PostModel(
-                                    sender: {
-                                      'uid': user!.uid,
-                                      'name': currentUSer.name,
-                                      'profile': currentUSer.profile ?? ''
-                                    },
-                                    postDate: DateTime.now(),
-                                    message: controller.text,
-                                    image: value,
-                                  ),
-                                );
-                              });
-                            }
-                          },
+                          onPressed: widget.isFromArticles
+                              ? _onPostArticle
+                              : () {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  if (chosenPictures.isEmpty) {
+                                    uploadPostFeed(
+                                      context,
+                                      PostModel(
+                                        sender: {
+                                          'uid': user!.uid,
+                                          'name': currentUSer.name,
+                                          'profile': currentUSer.profile ?? ''
+                                        },
+                                        postDate: DateTime.now(),
+                                        message: controller.text,
+                                        image: '',
+                                      ),
+                                    );
+                                  } else {
+                                    uploadImage(context, chosenPictures[0])
+                                        .then((value) {
+                                      uploadPostFeed(
+                                        context,
+                                        PostModel(
+                                          sender: {
+                                            'uid': user!.uid,
+                                            'name': currentUSer.name,
+                                            'profile': currentUSer.profile ?? ''
+                                          },
+                                          postDate: DateTime.now(),
+                                          message: controller.text,
+                                          image: value,
+                                        ),
+                                      );
+                                    });
+                                  }
+                                },
                           child: const Padding(
                             padding: EdgeInsets.symmetric(vertical: 6.0),
                             child: Text(
