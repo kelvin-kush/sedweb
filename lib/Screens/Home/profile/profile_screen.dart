@@ -2,7 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:sedweb/Screens/Home/profile/edit_profile.dart';
+import 'package:sedweb/Screens/Home/profile/followers/followers.dart';
+import 'package:sedweb/Screens/Home/profile/following/following.dart';
 import 'package:sedweb/Screens/Home/profile/picture_box.dart';
+import 'package:sedweb/Screens/Login/login_screen.dart';
 import 'package:sedweb/Screens/enter_document.dart';
 import 'package:sedweb/components/constraints.dart';
 import 'package:sedweb/models/post_model.dart';
@@ -21,39 +25,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: Colors.white,
-              elevation: 1,
-              title: const Text(
-                'Profile',
-              ),
-              actions: [
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.person,
-                      color: kPrimaryColor,
-                    ))
-              ],
-            ),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        elevation: 1,
+        title: const Text(
+          'Profile',
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.person,
+                color: kPrimaryColor,
+              ))
+        ],
+      ),
       body: SafeArea(
         child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                  child: StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(user!.uid)
-                          .snapshots(),
-                      builder: (context, AsyncSnapshot snapshot) {
-                        if (snapshot.hasData) {
-                          // print(snapshot.data);
-                          currentUSer = UserModel.fromMap(snapshot.data!);
-                          return Column(
+            width: double.infinity,
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(user!.uid)
+                    .snapshots(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    // print(snapshot.data);
+                    currentUSer = UserModel.fromMap(snapshot.data!);
+                    return Stack(children: [
+                      SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Column(
                             children: [
                               Container(
                                 decoration: BoxDecoration(
@@ -96,8 +101,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Icon(Icons.donut_large,size: 20,),
-                                 const SizedBox(width: 5,),
+                                  const Icon(
+                                    Icons.donut_large,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
                                   Text(
                                     currentUSer.bio!,
                                     style: const TextStyle(fontSize: 17),
@@ -111,8 +121,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  attributes('Followers: ', '${currentUSer.followers!.length}'),
-                                  attributes('Following: ', '${currentUSer.following!.length}')
+                                  attributes(
+                                      title: 'Followers: ',
+                                      value: '${currentUSer.followers!.length}',
+                                      onTap: () {
+                                        currentUSer.followers!.isNotEmpty
+                                            ? Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (ctx) =>
+                                                        FollowersScreen(
+                                                            followersUid:
+                                                                currentUSer
+                                                                    .followers!)))
+                                            : () {};
+                                      }),
+                                  attributes(
+                                    title: 'Following: ',
+                                    value: '${currentUSer.following!.length}',
+                                    onTap: () {
+                                      currentUSer.following!.isNotEmpty
+                                          ? Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (ctx) =>
+                                                      FollowingScreen(
+                                                          followingUid:
+                                                              currentUSer
+                                                                  .following!)))
+                                          : () {};
+                                    },
+                                  )
                                 ],
                               ),
                               const SizedBox(
@@ -164,50 +203,86 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     }
                                   }),
                             ],
-                          );
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const SizedBox(
-                            height: 100,
-                            child:  Center(
-                              child: CircularProgressIndicator(
-                                color: kPrimaryColor,
-                              ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                          top: 10,
+                          right: 0,
+                          child: Card(
+                            child: IconButton(
+                              tooltip: "Edit Profile",
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditProfile(
+                                              userDetails: snapshot,
+                                              currentUser: user!.uid,
+                                            )
+                                        // const EnterDocument(),
+                                        ));
+                              },
+                              icon: const Icon(Icons.create),
                             ),
-                          );
-                        } else {
-                          return Container();
-                        }
-                      })),
-              Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Card(
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const EnterDocument()));
-                      },
-                      icon: const Icon(Icons.create),
-                    ),
-                  ))
-            ],
-          ),
-        ),
+                          )),
+                      Positioned(
+                          top: 80,
+                          right: 0,
+                          child: Card(
+                            child: IconButton(
+                              color: Colors.red,
+                              tooltip: "Log Out",
+                              onPressed: () {
+                                FirebaseAuth.instance.signOut();
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginScreen()
+                                        // const EnterDocument(),
+                                        ),
+                                    ((route) => false));
+                              },
+                              icon: const Icon(Icons.exit_to_app),
+                            ),
+                          ))
+                    ]);
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const SizedBox(
+                      height: 100,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: kPrimaryColor,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                })),
       ),
     );
   }
 
-  Widget attributes(String title, String value) {
-    return RichText(
-        text: TextSpan(children: [
-      TextSpan(text: title),
-      TextSpan(
-          text: value,
-          style: const TextStyle(
-              color: kPrimaryColor, fontWeight: FontWeight.bold))
-    ], style: const TextStyle(fontSize: 17, color: Colors.black)));
+  Widget attributes({
+    required String title,
+    required String value,
+    required VoidCallback onTap,
+  }) {
+    return TextButton(
+      onPressed: onTap,
+      style: TextButton.styleFrom(
+          visualDensity: VisualDensity.compact, padding: EdgeInsets.zero),
+      child: RichText(
+          text: TextSpan(children: [
+        TextSpan(text: title),
+        TextSpan(
+            text: value,
+            style: const TextStyle(
+                color: kPrimaryColor, fontWeight: FontWeight.bold))
+      ], style: const TextStyle(fontSize: 17, color: Colors.black))),
+    );
   }
 }

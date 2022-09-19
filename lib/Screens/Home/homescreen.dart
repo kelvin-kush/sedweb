@@ -37,59 +37,64 @@ class _HomescreenState extends State<Homescreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(child: homeScreenItems.elementAt(_page)),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: kPrimaryColor,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: _page == 0 ? Colors.orange : primaryColor,
-            ),
-            label: '',
-            backgroundColor: kPrimaryColor,
-          ),
-          // ignore: prefer_const_constructors
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.menu_book,
-              color: _page == 1 ? Colors.orange : primaryColor,
-            ),
-            label: '',
-            backgroundColor: kPrimaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.post_add,
-              color: _page == 2 ? Colors.orange : primaryColor,
-            ),
-            label: '',
-            backgroundColor: kPrimaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.message_outlined,
-              color: _page == 3 ? Colors.orange : primaryColor,
-            ),
-            label: '',
-            backgroundColor: kPrimaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-              color: _page == 4 ? Colors.orange : primaryColor,
-            ),
-            label: '',
-            backgroundColor: primaryColor,
-          ),
-        ],
-        onTap: (index) {
-          setState(() {
-            _page = index;
-          });
+    return WillPopScope(
+        onWillPop: () async {
+          return false;
         },
-      ),
-    );
+        child: Scaffold(
+          body: SafeArea(child: homeScreenItems.elementAt(_page)),
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: kPrimaryColor,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home,
+                  color: _page == 0 ? Colors.orange : primaryColor,
+                ),
+                label: '',
+                backgroundColor: kPrimaryColor,
+              ),
+              // ignore: prefer_const_constructors
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.menu_book,
+                  color: _page == 1 ? Colors.orange : primaryColor,
+                ),
+                label: '',
+                backgroundColor: kPrimaryColor,
+              ),
+
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.post_add,
+                  color: _page == 2 ? Colors.orange : primaryColor,
+                ),
+                label: '',
+                backgroundColor: kPrimaryColor,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.message_outlined,
+                  color: _page == 3 ? Colors.orange : primaryColor,
+                ),
+                label: '',
+                backgroundColor: kPrimaryColor,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.person,
+                  color: _page == 4 ? Colors.orange : primaryColor,
+                ),
+                label: '',
+                backgroundColor: primaryColor,
+              ),
+            ],
+            onTap: (index) {
+              setState(() {
+                _page = index;
+              });
+            },
+          ),
+        ));
   }
 }
