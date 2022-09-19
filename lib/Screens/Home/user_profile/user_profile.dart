@@ -3,8 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import "package:flutter/material.dart";
+import 'package:sedweb/Screens/Home/profile/followers/followers.dart';
+import 'package:sedweb/Screens/Home/profile/following/following.dart';
 import 'package:sedweb/Screens/Home/profile/picture_box.dart';
 import 'package:sedweb/components/constraints.dart';
+import 'package:sedweb/database/feed_database.dart';
 import 'package:sedweb/models/post_model.dart';
 import 'package:sedweb/models/user_model.dart';
 
@@ -113,15 +116,39 @@ class _UserProfileState extends State<UserProfile> {
                             ],
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              attributes('Followers: ',
-                                  '${userModel.followers!.length}'),
-                              attributes('Following: ',
-                                  '${userModel.following!.length}'),
+                              attributes(
+                                  title: 'Followers: ',
+                                  value: '${userModel.followers!.length}',
+                                  onTap: () {
+                                    userModel!.followers!.isNotEmpty
+                                        ? Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (ctx) =>
+                                                    FollowersScreen(
+                                                        followersUid: userModel!
+                                                            .followers!)))
+                                        : () {};
+                                  }),
+                              attributes(
+                                title: 'Following: ',
+                                value: '${userModel.following!.length}',
+                                onTap: () {
+                                  userModel!.following!.isNotEmpty
+                                      ? Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (ctx) => FollowingScreen(
+                                                  followingUid:
+                                                      userModel!.following!)))
+                                      : () {};
+                                },
+                              )
                             ],
                           ),
                           const SizedBox(
@@ -233,7 +260,7 @@ class _UserProfileState extends State<UserProfile> {
                                                 .update({
                                               'following':
                                                   FieldValue.arrayRemove(
-                                                      [currentUser!.uid])
+                                                      [userModel!.id])
                                             });
                                           });
                                         }
@@ -251,7 +278,7 @@ class _UserProfileState extends State<UserProfile> {
                                                 .update({
                                               'following':
                                                   FieldValue.arrayUnion(
-                                                      [currentUser!.uid])
+                                                      [userModel!.id])
                                             });
                                           });
                                         },
@@ -346,14 +373,23 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
-  Widget attributes(String title, String value) {
-    return RichText(
-        text: TextSpan(children: [
-      TextSpan(text: title),
-      TextSpan(
-          text: value,
-          style: const TextStyle(
-              color: kPrimaryColor, fontWeight: FontWeight.bold))
-    ], style: const TextStyle(fontSize: 17, color: Colors.black)));
+  Widget attributes({
+    required String title,
+    required String value,
+    required VoidCallback onTap,
+  }) {
+    return TextButton(
+      onPressed: onTap,
+      style: TextButton.styleFrom(
+          visualDensity: VisualDensity.compact, padding: EdgeInsets.zero),
+      child: RichText(
+          text: TextSpan(children: [
+        TextSpan(text: title),
+        TextSpan(
+            text: value,
+            style: const TextStyle(
+                color: kPrimaryColor, fontWeight: FontWeight.bold))
+      ], style: const TextStyle(fontSize: 17, color: Colors.black))),
+    );
   }
 }

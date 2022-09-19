@@ -52,8 +52,8 @@ class DocumentListCard extends StatelessWidget {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: ((context, _index) {
-                          final _document =
-                              DocumentModel.fromMap(snapshot.data.docs[_index]);
+                          final _document = DocumentModel.fromMap(snapshot.data
+                              .docs[(snapshot.data.docs.length - 1) - _index]);
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(

@@ -1,5 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sedweb/Screens/Home/homescreen.dart';
 import 'package:sedweb/Screens/Login/login_screen.dart';
@@ -20,6 +20,8 @@ Future<void> main() async {
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
+
+User? user = FirebaseAuth.instance.currentUser;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -43,7 +45,7 @@ class MyApp extends StatelessWidget {
         titleTextStyle: TextStyle(
             color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 20),
       )),
-      home: LoginScreen(),
+      home: user != null ? Homescreen() : const LoginScreen(),
     );
   }
 }
