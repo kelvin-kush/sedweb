@@ -4,10 +4,11 @@ import 'package:sedweb/Screens/Login/login_screen.dart';
 import 'package:flutter/material.dart';
 //import 'package:final_project/Screens/SignUp/signup.dart';
 import 'package:sedweb/components/Rounded_button.dart';
-import 'package:sedweb/constraints.dart';
+
 import 'package:lottie/lottie.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/gestures.dart';
+import 'package:sedweb/components/constraints.dart';
 import 'package:sedweb/resources/auth_methods.dart';
 
 class Body extends StatefulWidget {
