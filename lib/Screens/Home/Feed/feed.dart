@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sedweb/Screens/Home/Feed/component/add_feed.dart';
 import 'package:sedweb/Screens/Home/Feed/component/feed_card.dart';
+import 'package:sedweb/Screens/notifications/notifications.dart';
 import 'package:sedweb/components/constraints.dart';
 import 'package:sedweb/models/post_model.dart';
 
@@ -13,6 +15,7 @@ class Feed extends StatefulWidget {
 }
 
 class _FeedState extends State<Feed> {
+  User? currentUser = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,12 +28,53 @@ class _FeedState extends State<Feed> {
                 'SedWeb',
               ),
               actions: [
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.home,
-                      color: kPrimaryColor,
-                    ))
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      NotificationPage(uid: currentUser!.uid)));
+                        },
+                        child: const Icon(
+                          Icons.notifications,
+                          color: kPrimaryColor,
+                          size: 30,
+                        )),
+                    StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection("notifications")
+                            .where('receiver', isEqualTo: currentUser!.uid)
+                            .where('seen', isEqualTo: false)
+                            .snapshots(),
+                        builder: (
+                          BuildContext context,
+                          notSnapshot,
+                        ) {
+                          if (notSnapshot.hasData &&
+                              notSnapshot.data!.docs.isNotEmpty) {
+                            return Positioned(
+                                top: 2,
+                                right: 13,
+                                child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Text(
+                                          "${notSnapshot.data!.docs.length}"),
+                                    )));
+                          } else {
+                            return Container();
+                          }
+                        })
+                  ],
+                )
               ],
             ),
             body: SizedBox(
