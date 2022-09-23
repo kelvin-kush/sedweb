@@ -281,6 +281,20 @@ class _UserProfileState extends State<UserProfile> {
                                                       [userModel!.id])
                                             });
                                           });
+
+                                          final ref = FirebaseFirestore.instance
+                                              .collection("notifications")
+                                              .doc();
+
+                                          ref.set({
+                                            "id":ref.id,
+                                            "seen": false,
+                                            "title": 'follow',
+                                            "message": 'follow',
+                                            "senderID": currentUser!.uid,
+                                            "receiver": userModel.id,
+                                            "date": DateTime.now(),
+                                          });
                                         },
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,

@@ -13,16 +13,22 @@ class NotificationPage extends StatefulWidget {
 
 class _NotificationPageState extends State<NotificationPage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Notifications')),
       body: SafeArea(
         child: Stack(children: [
-          StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
+          FutureBuilder<QuerySnapshot>(
+              future: FirebaseFirestore.instance
                   .collection("notifications")
                   .where('receiver', isEqualTo: widget.uid)
-                  .snapshots(),
+                  .get(),
               builder: (
                 BuildContext context,
                 snapshot,
@@ -36,14 +42,14 @@ class _NotificationPageState extends State<NotificationPage> {
                         if (data['seen'] == false) {
                           FirebaseFirestore.instance
                               .collection("notifications")
-                              .doc(data['notID'])
+                              .doc(data['id'])
                               .update({'seen': true});
                         }
                         return NotificationCard(
                           seen: data['seen'],
                           title: data['title'],
                           message: data['message'],
-                          senderProfile: data['sender']['profile'],
+                          senderID: data['senderID'],
                           receiver: data['receiver'],
                           date: (data['date'] as Timestamp).toDate(),
                         );
@@ -56,7 +62,7 @@ class _NotificationPageState extends State<NotificationPage> {
                     ),
                   );
                 } else {
-                  return const Center(child:  Text('No notifications found'));
+                  return const Center(child: Text('No notifications found'));
                 }
               }),
         ]),

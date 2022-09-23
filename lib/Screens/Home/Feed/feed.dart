@@ -54,6 +54,8 @@ class _FeedState extends State<Feed> {
                           BuildContext context,
                           notSnapshot,
                         ) {
+                          print(currentUser!.uid);
+                          print(notSnapshot.data!.docs.length);
                           if (notSnapshot.hasData &&
                               notSnapshot.data!.docs.isNotEmpty) {
                             return Positioned(
