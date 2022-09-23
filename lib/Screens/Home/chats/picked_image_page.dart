@@ -53,7 +53,7 @@ class _ViewPickedPictureState extends State<ViewPickedPicture> {
                 child: Container(
                   padding: const EdgeInsets.only(
                       left: 15, bottom: 20, top: 10, right: 10),
-                         color: Colors.grey[200],
+                  color: Colors.grey[200],
                   width: double.infinity,
                   // decoration: BoxDecoration(color: Colors.transparent),
                   child: Row(
@@ -67,19 +67,19 @@ class _ViewPickedPictureState extends State<ViewPickedPicture> {
                             setState(() {});
                           },
                           decoration: const InputDecoration(
-                              contentPadding:  EdgeInsets.only(
-                                  left: 20, top: 5, bottom: 5),
+                              contentPadding:
+                                  EdgeInsets.only(left: 20, top: 5, bottom: 5),
                               hintText: "Send message ...",
                               filled: true,
                               fillColor: Colors.white,
-                              hintStyle:  TextStyle(
+                              hintStyle: TextStyle(
                                   color: Colors.black, fontFamily: 'fantasy'),
                               border: OutlineInputBorder(
                                   borderSide:
-                                       BorderSide(color: Colors.black45)),
-                              focusedBorder:  OutlineInputBorder(
+                                      BorderSide(color: Colors.black45)),
+                              focusedBorder: OutlineInputBorder(
                                   borderSide:
-                                       BorderSide(color: kPrimaryColor))),
+                                      BorderSide(color: kPrimaryColor))),
                         ),
                       ),
                       const SizedBox(

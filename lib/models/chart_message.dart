@@ -5,11 +5,13 @@ class ChatMessage {
   final DateTime sendDate;
   final String? fileUrl;
   final String messageType;
+  //final String profile;
 
   ChatMessage({
     this.id,
     this.message,
     required this.sender,
+    // required this.profile,
     required this.sendDate,
     this.fileUrl,
     required this.messageType,
@@ -22,6 +24,7 @@ class ChatMessage {
       'sender': sender,
       'sendDate': sendDate,
       'fileUrl': fileUrl,
+      //  'profile':profile,
       'messageType': messageType,
     };
   }
@@ -31,6 +34,7 @@ class ChatMessage {
         message = json['message'] ?? "",
         sender = json['sender'],
         sendDate = json['sendDate'],
+        //  profile = json['profile'],
         fileUrl = json['fileUrl'] ?? "",
         messageType = json['messageType'];
 }
