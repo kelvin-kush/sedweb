@@ -8,11 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sedweb/Screens/Home/homescreen.dart';
 import 'package:sedweb/components/constraints.dart';
+import 'package:sedweb/models/article.dart';
 import 'package:sedweb/models/post_model.dart';
 import 'package:sedweb/models/user_model.dart';
 import 'package:sedweb/service/document_service.dart';
+import 'package:sedweb/service/firebase_db.dart';
+import 'package:sedweb/service/storage_service.dart';
 import 'package:sedweb/utils/utils.dart';
 import 'package:path/path.dart';
+import 'package:uuid/uuid.dart';
 
 class AddNewFeed extends StatefulWidget {
   final bool isFromArticles;
@@ -47,13 +51,59 @@ class _AddNewFeedState extends State<AddNewFeed> {
     var res = await DocumentService.instance.pickDocument();
     if (res is PlatformFile) {
       setState(() {
-        // print(File(res.path!,).readAsLinesSync());
         currentDoc = res;
       });
     }
   }
 
-  void _onPostArticle() async {}
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  void _onPostArticle(BuildContext context) async {
+    if (controller.text == null || controller.text.isEmpty) {
+      showErrorSnackBar(context, 'Please enter article topic');
+      return;
+    }
+    if (currentDoc == null) {
+      showErrorSnackBar(context, 'Please select a document');
+      return;
+    }
+    setState(() {
+      isLoading = true;
+    });
+
+    var res = await StorageService.instance
+        .uploadDocument(File(currentDoc!.path!), currentDoc!.name);
+    if (res != null) {
+      var error = await FirebaseDB.instance.addArticle(Article(
+          id: const Uuid().v4(),
+          documentUrl: res,
+          name: currentUSer.name ?? '',
+          userId: user!.uid,
+          profile: currentUSer.profile ?? '',
+          comments: [],
+          topic: controller.text,
+          createdAt: DateTime.now(),
+          docName: currentDoc?.name ?? ''));
+      setState(() {
+        isLoading = false;
+      });
+      if (error != null) {
+        showToast(error);
+        return;
+      }
+      showToast('Article uploaded successfully!');
+      controller.text = '';
+      currentDoc = null;
+      setState(() {});
+      return;
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -185,30 +235,15 @@ class _AddNewFeedState extends State<AddNewFeed> {
                             color: kPrimaryColor,
                           ),
                         )
-                      : TextButton(
-                          onPressed: widget.isFromArticles
-                              ? _onPostArticle
-                              : () {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  if (chosenPictures.isEmpty) {
-                                    uploadPostFeed(
-                                      context,
-                                      PostModel(
-                                        sender: {
-                                          'uid': user!.uid,
-                                          'name': currentUSer.name,
-                                          'profile': currentUSer.profile ?? ''
-                                        },
-                                        postDate: DateTime.now(),
-                                        message: controller.text,
-                                        image: '',
-                                      ),
-                                    );
-                                  } else {
-                                    uploadImage(context, chosenPictures[0])
-                                        .then((value) {
+                      : Builder(builder: (context) {
+                          return TextButton(
+                            onPressed: widget.isFromArticles
+                                ? () => _onPostArticle(context)
+                                : () {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    if (chosenPictures.isEmpty) {
                                       uploadPostFeed(
                                         context,
                                         PostModel(
@@ -219,24 +254,42 @@ class _AddNewFeedState extends State<AddNewFeed> {
                                           },
                                           postDate: DateTime.now(),
                                           message: controller.text,
-                                          image: value,
+                                          image: '',
                                         ),
                                       );
-                                    });
-                                  }
-                                },
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 6.0),
-                            child: Text(
-                              'Post',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 18),
+                                    } else {
+                                      uploadImage(context, chosenPictures[0])
+                                          .then((value) {
+                                        uploadPostFeed(
+                                          context,
+                                          PostModel(
+                                            sender: {
+                                              'uid': user!.uid,
+                                              'name': currentUSer.name,
+                                              'profile':
+                                                  currentUSer.profile ?? ''
+                                            },
+                                            postDate: DateTime.now(),
+                                            message: controller.text,
+                                            image: value,
+                                          ),
+                                        );
+                                      });
+                                    }
+                                  },
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 6.0),
+                              child: Text(
+                                'Post',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
+                              ),
                             ),
-                          ),
-                          style: TextButton.styleFrom(
-                              backgroundColor: kPrimaryColor,
-                              primary: Colors.white),
-                        ),
+                            style: TextButton.styleFrom(
+                                backgroundColor: kPrimaryColor,
+                                primary: Colors.white),
+                          );
+                        }),
                 )
               ]),
             ),

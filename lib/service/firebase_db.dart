@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sedweb/models/article.dart';
 import 'package:sedweb/models/user_model.dart';
 
 class FirebaseDB {
@@ -25,5 +26,26 @@ class FirebaseDB {
         .map((e) => e.data())
         .where((element) => element.id != uid)
         .toList();
+  }
+
+  Future<String?> addArticle(Article article) async {
+    try {
+      await _database
+          .collection('Articles')
+          .doc(article.id)
+          .set(article.toJson);
+    } on Exception {
+      return 'Error adding article';
+    }
+  }
+
+  Stream<QuerySnapshot<Article>> getArticles() async* {
+    yield* (_database
+        .collection('Articles')
+        .withConverter<Article>(
+            fromFirestore: (value, _) =>
+                Article.fromJson({...value.data()!, 'id': value.id}),
+            toFirestore: (data, _) => data.toJson)
+        .snapshots());
   }
 }
