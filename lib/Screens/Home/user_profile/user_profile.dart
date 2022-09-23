@@ -323,7 +323,7 @@ class _UserProfileState extends State<UserProfile> {
                           StreamBuilder<Object>(
                               stream: FirebaseFirestore.instance
                                   .collection('Posts')
-                                  .where('sender.uid', isEqualTo: widget.userId)
+                                  .where('senderID', isEqualTo: widget.userId)
                                   // .orderBy('postDate', descending: true)
                                   .snapshots(),
                               builder: (context, AsyncSnapshot snapshot) {
@@ -346,6 +346,7 @@ class _UserProfileState extends State<UserProfile> {
                                             snapshot.data.docs[index]);
                                         return PictureBox(
                                           post: myPosts,
+                                          user: userModel!,
                                         );
                                       });
                                 } else {

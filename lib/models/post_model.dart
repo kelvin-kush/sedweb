@@ -4,7 +4,7 @@ class PostModel {
   String? postID;
   String? message;
   int? likes;
-  Object sender;
+  String senderID;
   String? image;
   List? comments;
   List? likers;
@@ -18,7 +18,7 @@ class PostModel {
     this.postDate,
     this.image,
     this.comments,
-    required this.sender,
+    required this.senderID,
   });
 
   factory PostModel.fromMap(map) {
@@ -26,7 +26,7 @@ class PostModel {
       postID: map['postID'],
       image: map['image'],
       postDate: (map['postDate'] as Timestamp).toDate(),
-      sender: map['sender'],
+      senderID: map['senderID'],
       message: map['message'],
       likers: map['likers']??[],
       comments: map['comments'],
@@ -39,7 +39,7 @@ class PostModel {
       'postID': postID,
       'image': image ?? '',
       'postDate': postDate,
-      'sender': sender,
+      'senderID': senderID,
       'message': message ?? '',
       'likers': likers ?? [],
       'comments': comments ?? [],

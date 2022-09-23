@@ -247,11 +247,7 @@ class _AddNewFeedState extends State<AddNewFeed> {
                                       uploadPostFeed(
                                         context,
                                         PostModel(
-                                          sender: {
-                                            'uid': user!.uid,
-                                            'name': currentUSer.name,
-                                            'profile': currentUSer.profile ?? ''
-                                          },
+                                          senderID: user!.uid,
                                           postDate: DateTime.now(),
                                           message: controller.text,
                                           image: '',
@@ -263,12 +259,7 @@ class _AddNewFeedState extends State<AddNewFeed> {
                                         uploadPostFeed(
                                           context,
                                           PostModel(
-                                            sender: {
-                                              'uid': user!.uid,
-                                              'name': currentUSer.name,
-                                              'profile':
-                                                  currentUSer.profile ?? ''
-                                            },
+                                            senderID: user!.uid,
                                             postDate: DateTime.now(),
                                             message: controller.text,
                                             image: value,

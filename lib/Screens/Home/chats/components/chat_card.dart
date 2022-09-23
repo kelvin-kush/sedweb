@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sedweb/Screens/Home/chats/chat_screen.dart';
+import 'package:sedweb/components/constraints.dart';
 import 'package:sedweb/models/user_model.dart';
 
 class ChatCard extends StatelessWidget {
@@ -37,8 +39,38 @@ class ChatCard extends StatelessWidget {
                                 )),
                       );
                     },
-                    leading: const CircleAvatar(
-                      child: Icon(Icons.person),
+                    leading: Container(
+                      width: 40,
+                      height: 40,
+                      margin: const EdgeInsets.only(right: 5),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(25),
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              _userModel.profile!,
+                          fit: BoxFit.cover,
+                          width: 40,
+                          height: 40,
+                          //'${postModel.sender}',
+                          placeholder: (context, url) {
+                            return  const ColoredBox(
+                                color: Colors.white12,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: kPrimaryColor,
+                                  ),
+                                ));
+                          },
+                          errorWidget: (context, error, url) {
+                            return const CircleAvatar(
+                                child: Icon(
+                              Icons.error,
+                              color: Colors.white,
+                              size: 25,
+                            ));
+                          },
+                        ),
+                      ),
                     ),
                     title: Text(_userModel.name!),
                     // subtitle: const Text(

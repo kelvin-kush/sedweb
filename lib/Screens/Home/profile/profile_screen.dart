@@ -168,12 +168,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               StreamBuilder<Object>(
                                   stream: FirebaseFirestore.instance
                                       .collection('Posts')
-                                      .where('sender.uid',
+                                      .where('senderID',
                                           isEqualTo: currentUSer.id)
                                       // .orderBy('postDate', descending: true)
                                       .snapshots(),
                                   builder: (context, AsyncSnapshot snapshot) {
-                                    if (snapshot.hasData) {
+                                    if (snapshot.hasData &&
+                                        snapshot.data.docs.length > 0) {
                                       // print(snapshot.data.docs[0]["postID"]);
                                       return GridView.builder(
                                           itemCount: snapshot.data!.docs.length,
@@ -193,8 +194,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     snapshot.data.docs[index]);
                                             return PictureBox(
                                               post: myPosts,
+                                              user: currentUSer,
                                             );
                                           });
+                                    } else if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const SizedBox(
+                                        height: 100,
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            color: kPrimaryColor,
+                                          ),
+                                        ),
+                                      );
                                     } else {
                                       return const SizedBox(
                                         child: Center(

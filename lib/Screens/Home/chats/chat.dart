@@ -63,6 +63,15 @@ class _ChatsState extends State<Chats> {
                         groupChatId: _data[index].key!,
                       );
                     }));
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SizedBox(
+                  height: 100,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: kPrimaryColor,
+                    ),
+                  ),
+                );
               } else {
                 return Container();
               }

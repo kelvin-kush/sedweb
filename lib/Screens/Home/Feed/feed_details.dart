@@ -6,12 +6,15 @@ import 'package:sedweb/Screens/Home/Feed/component/comment_card.dart';
 import 'package:sedweb/Screens/Home/user_profile/user_profile.dart';
 import 'package:sedweb/components/constraints.dart';
 import 'package:sedweb/models/post_model.dart';
+import 'package:sedweb/models/user_model.dart';
 import 'package:sedweb/utils/utils.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class FeedDetails extends StatefulWidget {
-  const FeedDetails({Key? key, required this.postModel}) : super(key: key);
+  const FeedDetails({Key? key, required this.postModel, required this.user})
+      : super(key: key);
   final PostModel postModel;
+  final UserModel user;
 
   @override
   State<FeedDetails> createState() => _FeedDetailsState();
@@ -61,8 +64,7 @@ class _FeedDetailsState extends State<FeedDetails> {
                               context,
                               MaterialPageRoute(
                                   builder: ((context) => UserProfile(
-                                      userId: (widget.postModel.sender
-                                          as Map)['uid']!))));
+                                      userId: (widget.postModel.senderID)))));
                         },
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         child: Row(
@@ -73,17 +75,11 @@ class _FeedDetailsState extends State<FeedDetails> {
                               height: 50,
                               margin: const EdgeInsets.only(right: 5),
                               child: CircleAvatar(
-                                child: (widget.postModel.sender
-                                                as Map)['profile'] !=
-                                            null &&
-                                        (widget.postModel.sender
-                                                as Map)['profile'] !=
-                                            ''
+                                child: (widget.postModel.senderID.isNotEmpty
                                     ? ClipRRect(
                                         borderRadius: BorderRadius.circular(25),
                                         child: CachedNetworkImage(
-                                          imageUrl: (widget.postModel.sender
-                                              as Map)['profile'],
+                                          imageUrl: widget.user.profile!,
                                           fit: BoxFit.cover,
                                           width: 50,
                                           height: 50,
@@ -107,7 +103,7 @@ class _FeedDetailsState extends State<FeedDetails> {
                                           },
                                         ),
                                       )
-                                    : const Icon(Icons.person),
+                                    : const Icon(Icons.person)),
                               ),
                             ),
                             Expanded(
@@ -120,7 +116,7 @@ class _FeedDetailsState extends State<FeedDetails> {
                                     // mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Text(
-                                        '${(widget.postModel.sender as Map)['name']}',
+                                        widget.user.name!,
                                         maxLines: 1,
                                         style: const TextStyle(
                                             color: Colors.black,
@@ -239,8 +235,7 @@ class _FeedDetailsState extends State<FeedDetails> {
                         BuildContext context,
                         snapshot,
                       ) {
-                        if (!snapshot.hasData ||
-                            snapshot.data!.docs.isEmpty) {
+                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                           //error
                           return const Center(
                             child: Padding(
@@ -271,8 +266,8 @@ class _FeedDetailsState extends State<FeedDetails> {
                                   comment: data['comment'],
                                   senderName: data['sender.name'],
                                   senderImage: data['sender.profile'],
-                                  timeStamp: (data['timeStamp'] as Timestamp)
-                                      .toDate(),
+                                  timeStamp:
+                                      (data['timeStamp'] as Timestamp).toDate(),
                                 );
                                 // _controller!.setLooping(true);
                               });

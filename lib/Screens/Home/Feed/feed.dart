@@ -56,13 +56,7 @@ class _FeedState extends State<Feed> {
                                   return FeedCard(
                                       postModel: PostModel(
                                           postID: data[index]['postID'],
-                                          sender: {
-                                            'name': data[index]['sender']
-                                                ['name'],
-                                            'profile': data[index]['sender']
-                                                ['profile'],
-                                            'uid': data[index]['sender']['uid'],
-                                          },
+                                          senderID: data[index]['senderID'],
                                           likes: data[index]['likes'],
                                           likers: data[index]['likers'],
                                           message: data[index]['message'],
