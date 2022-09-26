@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_charset_detector/flutter_charset_detector.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sedweb/Screens/Home/homescreen.dart';
 import 'package:sedweb/components/constraints.dart';
@@ -16,6 +18,7 @@ import 'package:sedweb/service/firebase_db.dart';
 import 'package:sedweb/service/storage_service.dart';
 import 'package:sedweb/utils/utils.dart';
 import 'package:path/path.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:uuid/uuid.dart';
 
 class AddNewFeed extends StatefulWidget {
@@ -74,6 +77,7 @@ class _AddNewFeedState extends State<AddNewFeed> {
       isLoading = true;
     });
 
+    // currentDoc.
     var res = await StorageService.instance
         .uploadDocument(File(currentDoc!.path!), currentDoc!.name);
     if (res != null) {
@@ -219,8 +223,10 @@ class _AddNewFeedState extends State<AddNewFeed> {
                               showSnackBar(context, 'Error in picking image');
                             }
                           },
-                          leading: const Icon(
-                            Icons.image,
+                          leading: Icon(
+                            widget.isFromArticles
+                                ? Icons.document_scanner
+                                : Icons.image,
                             color: Colors.grey,
                           ),
                           title: const Text('Picture/Video'),
