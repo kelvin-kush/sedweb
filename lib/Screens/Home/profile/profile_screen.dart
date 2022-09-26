@@ -5,11 +5,10 @@ import "package:flutter/material.dart";
 import 'package:sedweb/Screens/Home/profile/edit_profile.dart';
 import 'package:sedweb/Screens/Home/profile/followers/followers.dart';
 import 'package:sedweb/Screens/Home/profile/following/following.dart';
-import 'package:sedweb/Screens/Home/profile/picture_box.dart';
+import 'package:sedweb/Screens/Home/profile/stuffs/note_stuff.dart';
+import 'package:sedweb/Screens/Home/profile/stuffs/post_stuff.dart';
 import 'package:sedweb/Screens/Login/login_screen.dart';
-import 'package:sedweb/Screens/enter_document.dart';
 import 'package:sedweb/components/constraints.dart';
-import 'package:sedweb/models/post_model.dart';
 import 'package:sedweb/models/user_model.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -22,6 +21,9 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel currentUSer = UserModel();
+
+  int showType = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,63 +159,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               const SizedBox(
                                 height: 30,
                               ),
-                              const Text(
-                                'Posts',
-                                style: TextStyle(
-                                    fontSize: 19, fontWeight: FontWeight.bold),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          showType = 1;
+                                        });
+                                      },
+                                      style: TextButton.styleFrom(
+                                          backgroundColor: showType == 1
+                                              ? kPrimaryColor
+                                              : Colors.white70),
+                                      child: Text(
+                                        'Posts',
+                                        style: TextStyle(
+                                            fontSize: 19,
+                                            fontWeight: FontWeight.bold,
+                                            color: showType == 1
+                                                ? Colors.white
+                                                : Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          showType = 2;
+                                        });
+                                      },
+                                      style: TextButton.styleFrom(
+                                          backgroundColor: showType != 1
+                                              ? kPrimaryColor
+                                              : Colors.white70),
+                                      child: Text(
+                                        'Notes',
+                                        style: TextStyle(
+                                            fontSize: 19,
+                                            fontWeight: FontWeight.bold,
+                                            color: showType != 1
+                                                ? Colors.white
+                                                : Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              showType == 1
+                                  ? PostStuff(currentUSer: currentUSer)
+                                  :  NoteStuff(userId: currentUSer.id!,),
                               const SizedBox(
                                 height: 20,
                               ),
-                              StreamBuilder<Object>(
-                                  stream: FirebaseFirestore.instance
-                                      .collection('Posts')
-                                      .where('senderID',
-                                          isEqualTo: currentUSer.id)
-                                      // .orderBy('postDate', descending: true)
-                                      .snapshots(),
-                                  builder: (context, AsyncSnapshot snapshot) {
-                                    if (snapshot.hasData &&
-                                        snapshot.data.docs.length > 0) {
-                                      // print(snapshot.data.docs[0]["postID"]);
-                                      return GridView.builder(
-                                          itemCount: snapshot.data!.docs.length,
-                                          shrinkWrap: true,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 3,
-                                            childAspectRatio: 1,
-                                            crossAxisSpacing: 8,
-                                            mainAxisSpacing: 8,
-                                          ),
-                                          itemBuilder: (context, index) {
-                                            PostModel myPosts =
-                                                PostModel.fromMap(
-                                                    snapshot.data.docs[index]);
-                                            return PictureBox(
-                                              post: myPosts,
-                                              user: currentUSer,
-                                            );
-                                          });
-                                    } else if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const SizedBox(
-                                        height: 100,
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                            color: kPrimaryColor,
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      return const SizedBox(
-                                        child: Center(
-                                            child: Text('No posts found')),
-                                      );
-                                    }
-                                  }),
                             ],
                           ),
                         ),
