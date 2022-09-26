@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sedweb/models/article.dart';
 import 'package:sedweb/models/user_model.dart';
+import 'package:uuid/uuid.dart';
 
 class FirebaseDB {
   late FirebaseFirestore _database;
@@ -37,6 +38,33 @@ class FirebaseDB {
     } on Exception {
       return 'Error adding article';
     }
+  }
+
+  Future<String?> addComment(ArticleComment articleComment) async {
+    try {
+      await Future.wait([
+        _database
+            .collection('ArticleComments')
+            .doc(articleComment.id)
+            .set(articleComment.toJson),
+        _database.collection('Articles').doc(articleComment.articleId).update({
+          'comments': FieldValue.arrayUnion([articleComment.id])
+        })
+      ]);
+    } catch (e) {
+      return 'Error adding comment';
+    }
+  }
+
+  Stream<QuerySnapshot<ArticleComment>> getComments(String articleId) async* {
+    yield* (_database
+        .collection('ArticleComments')
+        .where('articleId', isEqualTo: articleId)
+        .withConverter<ArticleComment>(
+            fromFirestore: (value, _) =>
+                ArticleComment.fromJson({...value.data()!, 'id': value.id}),
+            toFirestore: (data, _) => data.toJson)
+        .snapshots());
   }
 
   Stream<QuerySnapshot<Article>> getArticles() async* {

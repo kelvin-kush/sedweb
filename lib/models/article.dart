@@ -65,6 +65,15 @@ class ArticleComment {
       required this.profile,
       required this.createdAt});
 
+  ArticleComment.fromJson(Map<String, dynamic> data)
+      : id = data['id'],
+        articleId = data['articleId'],
+        comment = data['comment'],
+        createdAt = (data['createdAt'] ?? Timestamp.now()).toDate(),
+        name = data['name'],
+        profile = data['profile'],
+        userId = data['userId'];
+
   Map<String, dynamic> get toJson => {
         'id': id,
         'comment': comment,
