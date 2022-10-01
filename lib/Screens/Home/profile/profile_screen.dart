@@ -8,6 +8,7 @@ import 'package:sedweb/Screens/Home/profile/following/following.dart';
 import 'package:sedweb/Screens/Home/profile/stuffs/note_stuff.dart';
 import 'package:sedweb/Screens/Home/profile/stuffs/post_stuff.dart';
 import 'package:sedweb/Screens/Login/login_screen.dart';
+import 'package:sedweb/Screens/enter_document.dart';
 import 'package:sedweb/components/constraints.dart';
 import 'package:sedweb/models/user_model.dart';
 
@@ -212,7 +213,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               showType == 1
                                   ? PostStuff(currentUSer: currentUSer)
-                                  :  NoteStuff(userId: currentUSer.id!,),
+                                  : NoteStuff(
+                                      userId: currentUSer.id!,
+                                    ),
                               const SizedBox(
                                 height: 20,
                               ),
@@ -220,6 +223,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       ),
+                 /*   Positioned(
+                          top: 50,
+                          right: 0,
+                          child: Card(
+                            child: IconButton(
+                              tooltip: "Edit Profile",
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EnterDocument()
+                                        // const EnterDocument(),
+                                        )
+                                        );
+                              },
+                              icon: const Icon(Icons.create),
+                            ),
+                          )),*/
                       Positioned(
                           top: 10,
                           right: 0,

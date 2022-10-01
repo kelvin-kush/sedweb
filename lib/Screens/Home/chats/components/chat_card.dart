@@ -39,6 +39,7 @@ class ChatCard extends StatelessWidget {
                                 )),
                       );
                     },
+
                     leading: Container(
                       width: 40,
                       height: 40,
@@ -46,14 +47,13 @@ class ChatCard extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(25),
                         child: CachedNetworkImage(
-                          imageUrl:
-                              _userModel.profile!,
+                          imageUrl: _userModel.profile!,
                           fit: BoxFit.cover,
                           width: 40,
                           height: 40,
                           //'${postModel.sender}',
                           placeholder: (context, url) {
-                            return  const ColoredBox(
+                            return const ColoredBox(
                                 color: Colors.white12,
                                 child: Center(
                                   child: CircularProgressIndicator(

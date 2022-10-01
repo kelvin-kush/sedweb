@@ -200,6 +200,9 @@ class _FeedCardState extends State<FeedCard> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
                                           Icon(
                                             widget.postModel.likers!
                                                     .contains(_currentUser!.uid)
@@ -220,7 +223,7 @@ class _FeedCardState extends State<FeedCard> {
                                       style: TextButton.styleFrom(
                                           padding: EdgeInsets.zero))),
                               Expanded(
-                                  flex: 2,
+                                  flex: 3,
                                   child: TextButton(
                                     onPressed: () {
                                       Navigator.push(

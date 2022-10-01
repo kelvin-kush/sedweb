@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sedweb/Screens/Home/homescreen.dart';
 import 'package:sedweb/Screens/Login/login_screen.dart';
+import 'package:sedweb/Screens/welcome/welcome.dart';
 import 'package:sedweb/components/constraints.dart';
 
 Future<void> main() async {
@@ -21,8 +22,6 @@ Future<void> main() async {
   bool isLoggedIn = FirebaseAuth.instance.currentUser != null;
   runApp(MyApp(isLoggedIn: isLoggedIn));
 }
-
-
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
@@ -47,8 +46,8 @@ class MyApp extends StatelessWidget {
         titleTextStyle: TextStyle(
             color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 20),
       )),
+     
       home: isLoggedIn ? Homescreen() : const LoginScreen(),
-
     );
   }
 }

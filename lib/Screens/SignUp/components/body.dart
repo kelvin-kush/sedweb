@@ -169,7 +169,7 @@ class _BodyState extends State<Body> {
               child: TextField(
                 controller: usernameController,
                 decoration: InputDecoration(
-                    hintText: "username",
+                    hintText: "Username",
                     prefixIcon: Icon(
                       Icons.password,
                       color: Colors.black,
@@ -209,7 +209,7 @@ class _BodyState extends State<Body> {
                 controller: bioController,
                 obscureText: false,
                 decoration: InputDecoration(
-                    hintText: "bio",
+                    hintText: "Bio",
                     prefixIcon: Icon(
                       Icons.password,
                       color: Colors.black,

@@ -40,6 +40,7 @@ class _ArticleFullScreenState extends State<ArticleFullScreen> {
     });
     isReadLoading = false;
     isSummarizing = false;
+    isCommenting = false;
     textEditingController = TextEditingController(text: '');
   }
 
@@ -48,7 +49,6 @@ class _ArticleFullScreenState extends State<ArticleFullScreen> {
     setState(() {
       isCommenting = true;
     });
-    textEditingController.text = '';
     var res = await FirebaseDB.instance.addComment(ArticleComment(
         id: const Uuid().v4(),
         comment: textEditingController.text,
@@ -181,151 +181,176 @@ class _ArticleFullScreenState extends State<ArticleFullScreen> {
               color: Colors.black,
             )),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
-            leading: CircleAvatar(
-                child: widget.article.profile != null ||
-                        widget.article.profile.trim().isEmpty
-                    ? Image.network(
-                        widget.article.profile,
-                        fit: BoxFit.cover,
-                        errorBuilder: ((context, error, stackTrace) =>
-                            const CircleAvatar(
-                              child: Icon(Icons.person),
-                            )),
-                      )
-                    : const Icon(Icons.person)),
-            title: Text(
-              widget.article.name,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            trailing: Text(
-              timeago.format(widget.article.createdAt),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15.0),
-            child: RichText(
-                text: TextSpan(
-                    text: 'Article Topic:\n',
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600),
-                    children: [
-                  TextSpan(
-                      text: widget.article.topic,
-                      style: const TextStyle(
-                        color: Colors.black54,
-                      ))
-                ])),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15.0),
-            child: RichText(
-                text: TextSpan(
-                    text: 'Article filename:\n',
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600),
-                    children: [
-                  TextSpan(
-                      text: widget.article.docName,
-                      style: const TextStyle(
-                        color: Colors.black54,
-                      ))
-                ])),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
+      // resizeToAvoidBottomInset: false,
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height - 70,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                leading: CircleAvatar(
+                    child: SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: ClipOval(
+                    child: widget.article.profile != null ||
+                            widget.article.profile.trim().isEmpty
+                        ? Image.network(
+                            widget.article.profile,
+                            fit: BoxFit.cover,
+                            errorBuilder: ((context, error, stackTrace) =>
+                                const CircleAvatar(
+                                  child: Icon(Icons.person),
+                                  //fit: BoxFit.cover,
+                                )),
+                          )
+                        : const Icon(Icons.person),
+                  ),
+                )),
+                title: Text(
+                  widget.article.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                trailing: Text(
+                  timeago.format(widget.article.createdAt),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: RichText(
+                    text: TextSpan(
+                        text: 'Article Topic:\n',
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600),
+                        children: [
+                      TextSpan(
+                          text: widget.article.topic,
+                          style: const TextStyle(
+                            color: Colors.black54,
+                          ))
+                    ])),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: RichText(
+                    text: TextSpan(
+                        text: 'Article filename:\n',
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600),
+                        children: [
+                      TextSpan(
+                          text: widget.article.docName,
+                          style: const TextStyle(
+                            color: Colors.black54,
+                          ))
+                    ])),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.comment),
-                    const SizedBox(
-                      width: 10,
+                    Row(
+                      children: [
+                        const Icon(Icons.comment),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(widget.article.comments.length.toString())
+                      ],
                     ),
-                    Text(widget.article.comments.length.toString())
+                    isReadLoading
+                        ? const CircularProgressIndicator()
+                        : TextButton.icon(
+                            onPressed: onRead,
+                            icon: const Icon(Icons.read_more),
+                            label: const Text('Read article')),
+                    isSummarizing
+                        ? const CircularProgressIndicator()
+                        : TextButton.icon(
+                            onPressed: onSummarize,
+                            icon: const Icon(Icons.summarize),
+                            label: const Text('Get summary'))
                   ],
                 ),
-                isReadLoading
-                    ? const CircularProgressIndicator()
-                    : TextButton.icon(
-                        onPressed: onRead,
-                        icon: const Icon(Icons.read_more),
-                        label: const Text('Read article')),
-                isSummarizing
-                    ? const CircularProgressIndicator()
-                    : TextButton.icon(
-                        onPressed: onSummarize,
-                        icon: const Icon(Icons.summarize),
-                        label: const Text('Get summary'))
-              ],
-            ),
-          ),
-          const Divider(),
-          Expanded(
-              child: StreamBuilder<QuerySnapshot<ArticleComment>>(
-            stream: FirebaseDB.instance.getComments(widget.article.id),
-            builder: (BuildContext context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (snapshot.hasError) {
-                return const Center(
-                  child: Text('Error loading comments'),
-                );
-              }
-              if (snapshot.hasData) {
-                final data = snapshot.data!.docs.map((e) => e.data()).toList();
-                return ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (_, i) => ListTile(
-                          title: Text(data[i].name),
-                          subtitle: Text(data[i].comment),
-                          trailing: Text(timeago.format(data[i].createdAt)),
-                          leading: CircleAvatar(
-                            child: data[i].profile.isEmpty
-                                ? null
-                                : Image.network(data[i].profile),
-                          ),
-                        ));
-              }
-              return Container();
-            },
-          )),
-          Row(
-            children: [
+              ),
+              const Divider(),
               Expanded(
-                  child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: TextField(
-                  controller: textEditingController,
-                  decoration: const InputDecoration(
-                      hintText: 'Enter comment here',
-                      border: OutlineInputBorder()),
-                ),
+                  child: StreamBuilder<QuerySnapshot<ArticleComment>>(
+                stream: FirebaseDB.instance.getComments(widget.article.id),
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text('Error loading comments'),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    final data =
+                        snapshot.data!.docs.map((e) => e.data()).toList();
+                    return ListView.builder(
+                        itemCount: data.length,
+                        itemBuilder: (_, i) => ListTile(
+                              title: Text(data[i].name),
+                              subtitle: Text(
+                                data[i].comment,
+                              ),
+                              trailing: Text(timeago.format(data[i].createdAt)),
+                              leading: CircleAvatar(
+                                child: SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: ClipOval(
+                                    child: data[i].profile.isEmpty
+                                        ? null
+                                        : Image.network(
+                                            data[i].profile,
+                                            fit: BoxFit.cover,
+                                          ),
+                                  ),
+                                ),
+                              ),
+                            ));
+                  }
+                  return Container();
+                },
               )),
-              IconButton(
-                  onPressed: isCommenting ? null : onAddComment,
-                  icon: const Icon(Icons.send))
+              Row(
+                children: [
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: TextField(
+                      controller: textEditingController,
+                      decoration: const InputDecoration(
+                          hintText: 'Enter comment here',
+                          border: OutlineInputBorder()),
+                    ),
+                  )),
+                  IconButton(
+                      onPressed: isCommenting ? null : onAddComment,
+                      icon: const Icon(Icons.send))
+                ],
+              )
             ],
-          )
-        ],
+          ),
+        ),
       ),
     );
   }

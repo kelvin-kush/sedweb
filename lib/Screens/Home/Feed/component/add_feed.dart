@@ -33,7 +33,7 @@ class AddFeed extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(35),
                     border: Border.all(color: const Color(0xFF444444))),
-                child: const Text('Share your ideas'),
+                child: Text(isFromArticles ? '' : 'Share your ideas'),
               ),
               trailing: Icon(
                 isFromArticles ? Icons.document_scanner_rounded : Icons.image,
