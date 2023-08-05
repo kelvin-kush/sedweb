@@ -22,12 +22,12 @@ class _BodyState extends State<Body> {
   TextEditingController emailController = TextEditingController(text: '');
   TextEditingController passwordController = TextEditingController(text: '');
 
-  /* @override
+   @override
   void dispose() {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
-  }*/
+  }
   Future loginPage() async {
     setState(() => isLoading = true);
     await AuthController().login(

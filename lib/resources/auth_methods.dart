@@ -16,15 +16,7 @@ class AuthController {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /* @override
-  void onReady() {
-    super.onReady();
-
-    _user = Rx<User>(auth.currentUser);
-    //whenever things like login changes, the user will be notified
-    _user.bindStream(auth.userChanges());
-    ever(_user, _initialScreen);
-  }*/
+  
 
   _initialScreen(BuildContext context, User? user) {
     if (user == null) {
@@ -66,18 +58,11 @@ class AuthController {
   register(BuildContext context, String email, password, bio, username) async {
     String res = "Some error Occurred";
     try {
-      /* if (email.isNotEmpty ||
-          password.isNotEmpty ||
-          username.isNotEmpty ||
-          bio.isNotEmpty ||)
-         // file != null
-         */
-
-      //{
-      // registering user in auth with email and password
+      
+      
       UserCredential cred = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      //addiing to  our database
+      
       await _firestore.collection('users').doc(cred.user!.uid).set({
         'username': username,
         'uid': cred.user!.uid,

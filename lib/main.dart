@@ -8,16 +8,7 @@ import 'package:sedweb/components/constraints.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // if (kIsWeb) {
-  //   await Firebase.initializeApp(
-  //     options: const FirebaseOptions(
-  //         apiKey: "AIzaSyALOc_iVXTs8_ogJl2Gx2SV6LZ0T9A8wLE",
-  //         appId: "1:212207593132:web:389a951416e776977fe109",
-  //         messagingSenderId: "212207593132",
-  //         projectId: "sedweb-34b77",
-  //         storageBucket: "sedweb-34b77.appspot.com"),
-  //   );
-  // }
+ 
   await Firebase.initializeApp();
   bool isLoggedIn = FirebaseAuth.instance.currentUser != null;
   runApp(MyApp(isLoggedIn: isLoggedIn));
