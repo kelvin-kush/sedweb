@@ -25,7 +25,7 @@ class _FeedState extends State<Feed> {
               backgroundColor: Colors.white,
               elevation: 1,
               title: const Text(
-                'SedWeb',
+                'Study Buddie',
               ),
               actions: [
                 Stack(
