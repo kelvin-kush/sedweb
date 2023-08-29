@@ -42,7 +42,7 @@ class _FeedState extends State<Feed> {
                         child: const Icon(
                           Icons.notifications,
                           color: kPrimaryColor,
-                          size: 30,
+                          size: 32,
                         )),
                     StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
